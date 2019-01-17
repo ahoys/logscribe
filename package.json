@@ -1,9 +1,12 @@
 {
-  "name": "yetanotherlog",
+  "name": "filescribe",
   "version": "1.0.0",
   "description": "A log to file utility.",
   "main": "index.js",
-  "author": "Ari Höysniemi",
+  "author": {
+    "name": "Ari Höysniemi",
+    "url": "https://github.com/ahoys"
+  },
   "license": "MIT",
   "scripts": {
     "start": "node index.js",
@@ -16,5 +19,12 @@
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^23.6.0",
     "prettier": "^1.15.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ahoys/filescribe.git"
+  },
+  "files": [
+    "index.js"
+  ]
 }
