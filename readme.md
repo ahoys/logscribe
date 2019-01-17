@@ -25,18 +25,26 @@ See below for advanced.
 ## Syntax
 `log(message: string, tag: string, options: object);`
 
-1. The message you want to log.
-2. Tag for the message, if any.
-3. Custom options, if any.
+### Message
+A string message you want to log.
+
+### Tag (optional)
+A tag that (for example) clarifies the source of the message. Leave empty ('') if you don't want one.
+
+e.g. `log('Error found!', 'General');`
+
+### Options (optional)
+Override global logging settings with log-specific options. You can find the default settings below.
 
 ## Examples
-If you want to attach a tag:
+A log message with a tag:
 
 `log('Hello World!', 'myTag');`
 
-If you want to override some default setting:
+If you want to override default settings:
 
 ```
+const log = require('filescribe').log;
 log(
   'Hello World!',
   '', // This means there won't be a tag.
@@ -50,6 +58,7 @@ log(
 If you want to override some default setting for good, use "set":
 
 ```
+const filescribe = require('filescribe');
 filescribe.set({
   filename: 'myFile',
   ext: 'txt',
