@@ -68,7 +68,7 @@ filescribe.set({
 
 ## Default Settings
 
-Use filescribe.set() to override any of these settings. You can also override with the subscribe.log(), just use the keys below.
+Use filescribe.set() to override any of these settings. You can also override with the filescribe.log(), just use the keys below.
 
 Unknown settings won't be saved. Also, if the setting is of wrong type it won't be saved.
 
