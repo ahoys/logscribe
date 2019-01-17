@@ -1,5 +1,7 @@
 # FileScribe
 
+![alt text](https://github.com/ahoys/filescribe/blob/master/src/assets/filescribe.png "Filescribe")
+
 Yet another log-file utility! Provides a really simplistic way to log into a log-file with no extra dependencies.
 
 ## Install
