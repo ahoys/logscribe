@@ -25,6 +25,6 @@
     "url": "git://github.com/ahoys/filescribe.git"
   },
   "files": [
-    "index.js"
+    "./index.js"
   ]
 }
