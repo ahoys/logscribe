@@ -114,7 +114,7 @@ export const log = (
       const d = new Date();
       str += `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`;
       fs.appendFileSync(filepath, str, 'utf8');
-      if (print && process && process.stdout) {
+      if (print || opt.printConsole) {
         const pStr = tag && tag !== '' ? `[${tag}]` : '';
         const h = ('0' + d.getHours()).slice(-2);
         const m = ('0' + d.getMinutes()).slice(-2);
