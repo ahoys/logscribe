@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "lib": ["es7"],
+    "module": "commonjs",
+    "target": "es5",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "**/__tests__/*"
+  ]
+}

@@ -2,93 +2,117 @@
 
 ![alt text](https://github.com/ahoys/filescribe/blob/master/assets/filescribe.png "Filescribe")
 
-Yet another log-file utility! Provides a really simplistic way to log into a log-file with no extra dependencies.
+Yet another fast, simplistic and lightweight log-to-file utility!
+
+### Features
+- Log to file.
+- Automatic log-file splitting.
+- Optional console print outs.
+- Timestamps and tags.
+- Partial log disabling based on tags.
+- No colors!
+
+### Treats
+- No third party dependencies.
+- Exhaustively tested.
+- Performance measured.
+- Made with Typescript.
 
 ## Install
 
-`npm i filescribe`
-
-or
-
-`yarn add filescribe`
+Not yet released.
 
 ## Usage
-
+A typical example of Filescribe usage:
 ```
-const log = require('filescribe').log;
-log('Hello World!);
+import log from 'filescribe';
+log('Hello World');
+
+OR
+
+const log = require('filescribe);
+log('Hello World');
 ```
-And that's all folks. A file `application.log` appears into your project's root folder.
+Here we log `Hello World`. The message will automatically have a timestamp attached into it.
 
-See below for advanced.
-
-## Syntax
-`log(message: string, tag: string, options: object);`
-
-### Message
-A string message you want to log.
-
-### Tag (optional)
-A tag that (for example) clarifies the source of the message. Leave empty ('') if you don't want one.
-
-e.g. `log('Error found!', 'General');`
-
-### Options (optional)
-Override global logging settings with log-specific options. You can find the default settings below.
-
-## Examples
-A log message with a tag:
-
-`log('Hello World!', 'myTag');`
-
-If you want to override default settings:
-
+Another useful feature is tagging:
 ```
-const log = require('filescribe').log;
-log(
-  'Hello World!',
-  '', // This means there won't be a tag.
-  {
-    filename: 'myFile',
-    ext: 'txt'
-  }
-)
+import log from 'filescribe';
+log('Hello World', 'My Example Function', false);
+```
+This time the message will also have a `[My Example Function]` tag, which helps you to understand from where is the log coming from.
+
+We also set console printting to false, which means the result can be seen from the log file only.
+
+`log(message, tag, console print, options)`
+
+**By default the application_*.log file appears into the root folder of the project.**
+
+## Advanced
+
+### Default global options
+These options are used by default. You can change the options locally log-by-log or globally.
+```
+disabledTags: [],
+maxMsgLength: 8192,
+dirPath: '',
+printConsole: true,
 ```
 
-If you want to override some default setting for good, use "set":
+#### disabledTags: Array\<string\>
+Tags that won't log at the current moment.
 
+#### maxMsgLength: number
+After how many characters will the message be spliced?
+
+#### dirPath: string
+A custom directory path for the log file. E.g. `'c:/logs'`. The application must have a write access to the path.
+
+#### printConsole: boolean
+Whether to do console.log() print outs of the messages.
+
+### Filescribe.setGlobalOptions
+Sets new global options:
 ```
-const filescribe = require('filescribe');
-filescribe.set({
-  filename: 'myFile',
-  ext: 'txt',
-  maxSize: 1000,
+import { setGlobalOptions } from 'filescribe';
+setGlobalOptions.({
+  disabledTags: ['preventThisTag'],
+  maxMsgLength: 10240,
+  dirPath: './logs',
+  printConsole: false,
 });
 ```
 
-## Default Settings
+**Tip:** Adding tags to disabledTags will disable all logs that have the tag.
 
-Use filescribe.set() to override any of these settings. You can also override with the filescribe.log(), just use the keys below.
-
-Unknown settings won't be saved. Also, if the setting is of wrong type it won't be saved.
-
+### Filescribe.getGlobalOptions
+Returns the current global options of Filescribe:
 ```
-filename: 'application', // Filename for the log.
-path: './', // Application's root.
-ext: 'log', // Extension of the log.
-timestamps: true, // Whether to show timestamps.
-maxSize: 1000000, // Maximum size of the file. 1000 = 1KB.
-maxStrLength: 1024, // Maximum length of a one log('').
-disabledTags: [], // Disabled tags, e.g. ['myTag'].
+import { getGlobalOptions } from 'filescribe';
+console.log(getGlobalOptions());
 ```
 
-## Other tricks
+### Local logging options
+As promised, you can also have custom options log by log. Maybe some logs need to go somewhere else? Maybe some logs can't be over 512 characters? No problem:
+```
+import log from 'filescribe';
+log(
+  'Hello World',
+  '',
+  false,
+  {
+    maxMsgLength: 512,
+    dirPath: './specialLogs'
+  }
+);
+```
 
-### filescribe.disable(tag: string);
-Disables filescribe (won't log) for the given tag. For example `filescribe.disable('myTag');` would disable all myTag logs. If you want to disable all logging, use: `filescribe.disable('*');`.
+**Tip:** Leaving the tag empty ('') means there won't be any tags attached.
 
-### filescribe.enable(tag: string);
-This way you can enable what you've disabled. To enable all: `filescribe.enable('*')`.
+## Performance
+Here are the v.1.0.0 performance readings (i5-7600K):
+- filescribe.log: **0.162ms**
+- filescribe.getGlobalOptions: **0.015ms**
+- filescribe.setGlobalOptions: **0.123ms**
 
-### filescribe.getConfig();
-Returns the current global config object with all the options.
+Size of the bundle: **1.76KB**

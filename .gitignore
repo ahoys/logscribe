@@ -1,5 +1,5 @@
 node_modules/
+dist/
 yarn-error.log
-console.log
-application.log
-log.txt
+application*
+test.js
