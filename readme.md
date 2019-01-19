@@ -10,7 +10,6 @@ Yet another fast, simplistic and lightweight log-to-file utility!
 - Optional console print outs.
 - Timestamps and tags.
 - Partial log disabling based on tags.
-- No colors!
 
 ### Treats
 - No third party dependencies.
