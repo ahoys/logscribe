@@ -10,6 +10,7 @@ const globalOptions: IglobalOptions = {
   disabledTags: [],
   filePrefix: 'application',
   maxMsgLength: 8192,
+  printColor: '\x1b[32m',
   printConsole: true,
 };
 
@@ -154,24 +155,22 @@ export const getLogStr = (
  * @param {any} msg - The message text.
  * @param {string} tag - Tag to be used, if any.
  * @param {Date} date - Date, if any.
+ * @param {IglobalOptions} options - Custom options, if any.
  */
-export const print = (msg: any, tag?: string, date?: Date): void => {
+export const print = (
+  msg: any,
+  tag?: string,
+  date?: Date,
+  options?: IglobalOptions
+): void => {
   try {
+    const opt = options ? readLocalOptions(options) : globalOptions;
     const pStr = tag && tag !== '' ? `[${tag}]` : '';
     const d = date || new Date();
     const h = ('0' + d.getHours()).slice(-2);
     const m = ('0' + d.getMinutes()).slice(-2);
-    if (msg[0] === '!' && msg[1] === '!') {
-      // Red.
-      console.log(
-        '\x1b[31m',
-        `${pStr}[${h}:${m}] -\x1b[0m`,
-        msg.slice(2, msg.length)
-      );
-    } else {
-      // Default.
-      console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
-    }
+    const s = ('0' + d.getSeconds()).slice(-2);
+    console.log(`${opt.printColor}${pStr}[${h}:${m}:${s}] -\x1b[0m`, msg);
   } catch {
     console.log('');
   }
@@ -203,7 +202,7 @@ export const log = (
         const date = new Date();
         fs.appendFile(filepath, getLogStr(msg, date, tag, opt), 'utf8', err => {
           if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-            print(msg, tag, date);
+            print(msg, tag, date, opt);
           }
         });
       }
@@ -237,7 +236,7 @@ export const logSync = (
       const date = new Date();
       fs.appendFileSync(filepath, getLogStr(msg, date, tag, opt), 'utf8');
       if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-        print(msg, tag, date);
+        print(msg, tag, date, opt);
       }
     }
   } catch {
