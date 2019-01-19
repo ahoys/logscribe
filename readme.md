@@ -1,6 +1,6 @@
 # LogScribe
 
-![alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe.png "Logscribe")
+![alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe_192.png "Logscribe")
 
 Yet another fast, simplistic and lightweight log-to-file utility!
 
