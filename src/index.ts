@@ -117,6 +117,40 @@ const getFilePathSync = (dirPath: string, filePrefix): string => {
 };
 
 /**
+ * Returns a string that is formatted for logging.
+ * @param {any} msg - A message to be logged.
+ * @param {Date} date - Datetime of the log.
+ * @param {string} tag - A tag of the log, if any.
+ * @param {IglobalOptions} options - Custom options, if any.
+ */
+export const getLogStr = (
+  msg: any,
+  date: Date,
+  tag?: string,
+  options?: IglobalOptions
+): string => {
+  try {
+    const warn = typeof msg === 'string' && msg[0] === '!' && msg[1] === '!';
+    let str = warn ? '\x1b[31m' : '\x1b[32m';
+    // Attach tag.
+    if (typeof tag === 'string' && tag !== '') {
+      str += `[${tag}]\n`;
+    }
+    // Attach date.
+    str += `[${date}]\x1b[0m\n`;
+    // Attach message.
+    str +=
+      typeof msg === 'string'
+        ? `${msg.substr(0, options.maxMsgLength)}\n\n`
+        : `${msg}\n\n`;
+    // Return the result.
+    return str;
+  } catch {
+    return '';
+  }
+};
+
+/**
  * Prints out a message.
  * @param {any} msg - The message text.
  * @param {string} tag - Tag to be used, if any.
@@ -167,18 +201,10 @@ export const log = (
         !opt.disabledTags.includes('*') &&
         !opt.disabledTags.includes(tag)
       ) {
-        let str = '';
-        if (tag && tag !== '') {
-          str += `[${tag}]\n`;
-        }
-        const d = new Date();
-        str +=
-          typeof msg === 'string'
-            ? `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`
-            : `${d}\n${msg}\n\n`;
-        fs.appendFile(filepath, str, 'utf8', err => {
+        const date = new Date();
+        fs.appendFile(filepath, getLogStr(msg, date, tag, opt), 'utf8', err => {
           if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-            print(msg, tag, d);
+            print(msg, tag, date);
           }
         });
       }
@@ -209,18 +235,10 @@ export const logSync = (
       !opt.disabledTags.includes('*') &&
       !opt.disabledTags.includes(tag)
     ) {
-      let str = '';
-      if (tag && tag !== '') {
-        str += `[${tag}]\n`;
-      }
-      const d = new Date();
-      str +=
-        typeof msg === 'string'
-          ? `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`
-          : `${d}\n${msg}\n\n`;
-      fs.appendFileSync(filepath, str, 'utf8');
+      const date = new Date();
+      fs.appendFileSync(filepath, getLogStr(msg, date, tag, opt), 'utf8');
       if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-        print(msg, tag, d);
+        print(msg, tag, date);
       }
     }
   } catch {
