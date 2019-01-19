@@ -172,7 +172,10 @@ export const log = (
           str += `[${tag}]\n`;
         }
         const d = new Date();
-        str += `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`;
+        str +=
+          typeof msg === 'string'
+            ? `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`
+            : `${d}\n${msg}\n\n`;
         fs.appendFile(filepath, str, 'utf8', err => {
           if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
             print(msg, tag, d);
@@ -211,7 +214,10 @@ export const logSync = (
         str += `[${tag}]\n`;
       }
       const d = new Date();
-      str += `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`;
+      str +=
+        typeof msg === 'string'
+          ? `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`
+          : `${d}\n${msg}\n\n`;
       fs.appendFileSync(filepath, str, 'utf8');
       if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
         print(msg, tag, d);
