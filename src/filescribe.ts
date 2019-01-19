@@ -115,7 +115,17 @@ export const log = (
             const pStr = tag && tag !== '' ? `[${tag}]` : '';
             const h = ('0' + d.getHours()).slice(-2);
             const m = ('0' + d.getMinutes()).slice(-2);
-            console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
+            if (msg[0] === '!' && msg[1] === '!') {
+              // Red.
+              console.log(
+                '\x1b[31m',
+                `${pStr}[${h}:${m}] -\x1b[0m`,
+                msg.slice(2, msg.length)
+              );
+            } else {
+              // Default.
+              console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
+            }
           }
         });
       }

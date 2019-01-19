@@ -48,6 +48,8 @@ We also set console printting to false, which means the result can be seen from 
 
 **By default the application_*.log file appears into the root folder of the project.**
 
+**Tip:** Adding !! in front of a message (e.g. `!!Memory failure.`) will color it red!
+
 ## Advanced
 
 ### Default global options
