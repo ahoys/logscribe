@@ -35,7 +35,7 @@ And this is how my `application_2019_01_19.log` now looks like.
 - Automatic log file splitting.
 - Custom log folders.
 - Custom log prefixes.
-- Warning colors.
+- Console colors.
 - Timestamps and tags.
 - Everything relevant can be configured.
 - Log-specific options.
@@ -101,6 +101,7 @@ Returns the currently active global options.
 import { getGlobalOptions } from 'logscribe';
 getGlobalOptions();
 ```
+1. **@returns {object}** - The current global settings.
 
 ### setGlobalOptions()
 Sets the currently active global options. Everything after this (meaning log(), print(), etc.) will be affected.
