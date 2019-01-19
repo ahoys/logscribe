@@ -1,8 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { IglobalOptions } from './types';
 require.main = process.mainModule;
 const appDir = path.dirname(require.main.filename);
+
+export interface IglobalOptions {
+  dirPath?: string;
+  disabledTags?: Array<string | null>;
+  filePrefix?: string;
+  maxMsgLength?: number;
+  printColor?: string;
+  printConsole?: boolean;
+}
 
 // Here we have the default configuration for LogScribe.
 const globalOptions: IglobalOptions = {
