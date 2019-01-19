@@ -81,6 +81,12 @@ const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
   });
 };
 
+/**
+ * Returns a file path (synchronized).
+ * @param {string} dirPath - A custom or default directory path.
+ * @param {string} filePrefix - Prefix for the file.
+ * @returns {Promise<string>} - A full absolute filepath.
+ */
 const getFilePathSync = (dirPath: string, filePrefix): string => {
   try {
     const dPath = path.resolve(dirPath);
@@ -177,6 +183,14 @@ export const log = (
   });
 };
 
+/**
+ * Creates a log (synchronized).
+ * @param {string} msg - A message to log and print.
+ * @param {string} tag - A tag for the message.
+ * @param {boolean} doPrint - Whether to print console.log.
+ * @param {object} options - Custom options for the execution.
+ * @returns {void} - The generated string.
+ */
 export const logSync = (
   msg: string,
   tag: string,
@@ -234,5 +248,8 @@ export const setGlobalOptions = (options: IglobalOptions): IglobalOptions => {
     return globalOptions;
   }
 };
+
+// Used for tests.
+export const forTesting = { readLocalOptions, getFilePath, getFilePathSync };
 
 export default log;
