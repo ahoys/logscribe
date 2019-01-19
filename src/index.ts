@@ -118,11 +118,11 @@ const getFilePathSync = (dirPath: string, filePrefix): string => {
 
 /**
  * Prints out a message.
- * @param {string} msg - The message text.
+ * @param {any} msg - The message text.
  * @param {string} tag - Tag to be used, if any.
  * @param {Date} date - Date, if any.
  */
-export const print = (msg: string, tag: string, date: Date): void => {
+export const print = (msg: any, tag?: string, date?: Date): void => {
   try {
     const pStr = tag && tag !== '' ? `[${tag}]` : '';
     const d = date || new Date();
