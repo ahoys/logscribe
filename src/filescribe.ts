@@ -53,14 +53,14 @@ const readLocalOptions = (options: IglobalOptions): IglobalOptions => {
 const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
   return new Promise((resolve, reject) => {
     const dir = path.resolve(dirPath);
-    fs.readdir(dir, (err, files) => {
+    fs.readdir(dir, (err, items) => {
       if (!err) {
         const r =
           filePrefix === 'application'
             ? regex
             : new RegExp(`^${filePrefix}_.*log`, 'g');
         // Returns e.g. application_2019_01_19_123123123.log.
-        const file = files
+        const file = items
           .filter(f => f.match(r))
           .find(f => fs.statSync(`${dir}\\${f}`).size < maxFileSize);
         if (file) {
@@ -81,18 +81,75 @@ const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
   });
 };
 
+const getFilePathSync = (dirPath: string, filePrefix): string => {
+  try {
+    const dPath = path.resolve(dirPath);
+    const items = fs.readdirSync(dPath);
+    if (items) {
+      const r =
+        filePrefix === 'application'
+          ? regex
+          : new RegExp(`^${filePrefix}_.*log`, 'g');
+      // Returns e.g. application_2019_01_19_123123123.log.
+      const file = items
+        .filter(f => f.match(r))
+        .find(f => fs.statSync(`${dPath}\\${f}`).size < maxFileSize);
+      if (file) {
+        return `${dPath}\\${file}`;
+      }
+      // Generate a filename as no suitable file was found.
+      const d = new Date();
+      return (
+        `${dPath}\\${filePrefix}_${d.getFullYear()}_${d.getMonth()}_` +
+        `${d.getDate()}_${d.getTime()}.log`
+      );
+    }
+    return '';
+  } catch {
+    return '';
+  }
+};
+
+/**
+ * Prints out a message.
+ * @param {string} msg - The message text.
+ * @param {string} tag - Tag to be used, if any.
+ * @param {Date} date - Date, if any.
+ */
+export const print = (msg: string, tag: string, date: Date): void => {
+  try {
+    const pStr = tag && tag !== '' ? `[${tag}]` : '';
+    const d = date || new Date();
+    const h = ('0' + d.getHours()).slice(-2);
+    const m = ('0' + d.getMinutes()).slice(-2);
+    if (msg[0] === '!' && msg[1] === '!') {
+      // Red.
+      console.log(
+        '\x1b[31m',
+        `${pStr}[${h}:${m}] -\x1b[0m`,
+        msg.slice(2, msg.length)
+      );
+    } else {
+      // Default.
+      console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
+    }
+  } catch {
+    return;
+  }
+};
+
 /**
  * Creates a log.
  * @param {string} msg - A message to log and print.
  * @param {string} tag - A tag for the message.
- * @param {boolean} print - Whether to print console.log.
+ * @param {boolean} doPrint - Whether to print console.log.
  * @param {object} options - Custom options for the execution.
  * @returns {void} - The generated string.
  */
 export const log = (
   msg: string,
   tag: string,
-  print: boolean,
+  doPrint: boolean,
   options: IglobalOptions
 ): void => {
   new Promise(() => {
@@ -111,26 +168,44 @@ export const log = (
         const d = new Date();
         str += `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`;
         fs.appendFile(filepath, str, 'utf8', err => {
-          if (print || opt.printConsole) {
-            const pStr = tag && tag !== '' ? `[${tag}]` : '';
-            const h = ('0' + d.getHours()).slice(-2);
-            const m = ('0' + d.getMinutes()).slice(-2);
-            if (msg[0] === '!' && msg[1] === '!') {
-              // Red.
-              console.log(
-                '\x1b[31m',
-                `${pStr}[${h}:${m}] -\x1b[0m`,
-                msg.slice(2, msg.length)
-              );
-            } else {
-              // Default.
-              console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
-            }
+          if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
+            print(msg, tag, d);
           }
         });
       }
     });
   });
+};
+
+export const logSync = (
+  msg: string,
+  tag: string,
+  doPrint: boolean,
+  options: IglobalOptions
+): void => {
+  try {
+    const opt = options ? readLocalOptions(options) : globalOptions;
+    const filepath = getFilePathSync(opt.dirPath, opt.filePrefix);
+    if (
+      // Empty path means something failed.
+      filepath !== '' &&
+      !opt.disabledTags.includes('*') &&
+      !opt.disabledTags.includes(tag)
+    ) {
+      let str = '';
+      if (tag && tag !== '') {
+        str += `[${tag}]\n`;
+      }
+      const d = new Date();
+      str += `${d}\n${msg.substr(0, opt.maxMsgLength)}\n\n`;
+      fs.appendFileSync(filepath, str, 'utf8');
+      if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
+        print(msg, tag, d);
+      }
+    }
+  } catch {
+    return;
+  }
 };
 
 /**

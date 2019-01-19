@@ -6,15 +6,27 @@ const f = require('./dist/index');
 /**
  * Logs:
  * y2019/m01/d19
- * fn_log: 0.976ms
- * fn_getGlobalOptions: 0.015ms
- * fn_setGlobalOptions: 0.123ms
+ * fn_log: 0.849ms
+ * fn_logSync: 3.126ms
+ * fn_print: 0.489ms
+ * fn_getGlobalOptions: 0.021ms
+ * fn_setGlobalOptions: 0.142ms
  */
 
 // log
 console.time('fnc_log');
-f.log('msg', 'tag');
+f.log('msg', 'log', false);
 console.timeEnd('fnc_log');
+
+// logSync
+console.time('fnc_logSync');
+f.logSync('msg', 'logSync', false);
+console.timeEnd('fnc_logSync');
+
+// print
+console.time('fnc_print');
+f.print('msg', 'print');
+console.timeEnd('fnc_print');
 
 // getGlobalOptions
 console.time('fnc_getGlobalOptions');
@@ -24,8 +36,10 @@ console.timeEnd('fnc_getGlobalOptions');
 // setGlobalOptions
 console.time('fnc_setGlobalOptions');
 f.setGlobalOptions({
-  disabledTags: [],
+  dirPath: './',
+  disabledTags: ['d-tag'],
+  filePrefix: 'custom',
   maxMsgLength: 1024,
-  path: '',
+  printConsole: false,
 });
 console.timeEnd('fnc_setGlobalOptions');
