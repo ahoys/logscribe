@@ -1,6 +1,6 @@
-# FileScribe
+# LogScribe
 
-![alt text](https://github.com/ahoys/filescribe/blob/master/assets/filescribe.png "Filescribe")
+![alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe.png "Logscribe")
 
 Yet another fast, simplistic and lightweight log-to-file utility!
 
@@ -22,21 +22,21 @@ Yet another fast, simplistic and lightweight log-to-file utility!
 Not yet released.
 
 ## Usage
-A typical example of Filescribe usage:
+A typical example of Logscribe usage:
 ```
-import log from 'filescribe';
+import log from 'logscribe';
 log('Hello World');
 
 OR
 
-const log = require('filescribe);
+const log = require('logscribe);
 log('Hello World');
 ```
 Here we log `Hello World`. The message will automatically have a timestamp attached into it.
 
 Another useful feature is tagging:
 ```
-import log from 'filescribe';
+import log from 'logscribe';
 log('Hello World', 'My Example Function', false);
 ```
 This time the message will also have a `[My Example Function]` tag, which helps you to understand from where is the log coming from.
@@ -76,10 +76,10 @@ After how many characters will the message be spliced?
 #### printConsole: boolean
 Whether to do console.log() print outs of the messages.
 
-### Filescribe.setGlobalOptions
+### Logscribe.setGlobalOptions
 Sets new global options:
 ```
-import { setGlobalOptions } from 'filescribe';
+import { setGlobalOptions } from 'logscribe';
 setGlobalOptions.({
   disabledTags: ['preventThisTag'],
   maxMsgLength: 10240,
@@ -90,17 +90,17 @@ setGlobalOptions.({
 
 **Tip:** Adding tags to disabledTags will disable all logs that have the tag.
 
-### Filescribe.getGlobalOptions
-Returns the current global options of Filescribe:
+### Logscribe.getGlobalOptions
+Returns the current global options of Logscribe:
 ```
-import { getGlobalOptions } from 'filescribe';
+import { getGlobalOptions } from 'logscribe';
 console.log(getGlobalOptions());
 ```
 
 ### Local logging options
 As promised, you can also have custom options log by log. Maybe some logs need to go somewhere else? Maybe some logs can't be over 512 characters? No problem:
 ```
-import log from 'filescribe';
+import log from 'logscribe';
 log(
   'Hello World',
   '',
@@ -116,8 +116,8 @@ log(
 
 ## Performance
 Here are the v.1.0.0 performance readings (i5-7600K):
-- filescribe.log: **0.976ms**
-- filescribe.getGlobalOptions: **0.015ms**
-- filescribe.setGlobalOptions: **0.123ms**
+- logscribe.log: **0.976ms**
+- logscribe.getGlobalOptions: **0.015ms**
+- logscribe.setGlobalOptions: **0.123ms**
 
 Size of the bundle: **1.76KB**

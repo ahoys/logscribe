@@ -9,11 +9,11 @@ const src = path.resolve(__dirname, './src')
 module.exports = {
   mode: 'production',
   target: 'node',
-  entry: `${src}/filescribe.ts`,
+  entry: `${src}/index.ts`,
   output: {
     path: dist,
     filename: 'index.js',
-    library: 'filescribe',
+    library: 'logscribe',
     libraryTarget: 'umd',
   },
   module: {

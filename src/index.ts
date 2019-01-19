@@ -4,7 +4,7 @@ import { IglobalOptions } from './types';
 require.main = process.mainModule;
 const appDir = path.dirname(require.main.filename);
 
-// Here we have the default configuration for Filescribe.
+// Here we have the default configuration for LogScribe.
 const globalOptions: IglobalOptions = {
   dirPath: appDir,
   disabledTags: [],

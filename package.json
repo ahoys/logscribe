@@ -1,7 +1,7 @@
 {
-  "name": "filescribe",
+  "name": "logscribe",
   "version": "1.0.0",
-  "description": "A log to file utility.",
+  "description": "A speedy log to file utility.",
   "main": "dist/index.js",
   "author": {
     "name": "Ari Höysniemi",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ahoys/filescribe.git"
+    "url": "git://github.com/ahoys/logscribe.git"
   },
   "files": [
     "dist/index.js"
