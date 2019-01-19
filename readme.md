@@ -41,12 +41,12 @@ And this is how my `application_2019_01_19.log` now looks like.
 - Log-specific options.
 
 ### Specs
-- Bundle only 4KB.
-- log: 0.849ms
-- logSync: 3.126ms
-- print: 0.489ms
-- getGlobalOptions: 0.021ms
-- setGlobalOptions: 0.142ms
+- Bundle only ~4KB.
+- log(): 0.936ms
+- logSync(): 3.126ms
+- print(): 0.587ms
+- getGlobalOptions(): 0.021ms
+- setGlobalOptions(): 0.134ms
 
 ## Install
 

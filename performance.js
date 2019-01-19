@@ -6,12 +6,14 @@ const f = require('./dist/index');
 /**
  * Logs:
  * y2019/m01/d19
- * fn_log: 0.849ms
+ * fn_log: 0.936ms
  * fn_logSync: 3.126ms
- * fn_print: 0.489ms
+ * fn_print: 0.587ms
  * fn_getGlobalOptions: 0.021ms
- * fn_setGlobalOptions: 0.142ms
+ * fn_setGlobalOptions: 0.134ms
  */
+
+console.log('\n');
 
 // log
 console.time('fnc_log');
