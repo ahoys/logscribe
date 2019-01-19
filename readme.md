@@ -7,7 +7,7 @@ How can a log be a scribe, you might wonder.
 Well, by being super fast, simplistic and yet lightweight! That's how and here it is.
 
 ### What it does?
-LogScribe is a yet another log-to-file utility library. It allows you to asynchonously write log and at the same time print console messages with a one, very short, command. LogScribe automatically splits the log files as they get too large.
+LogScribe is a yet another log-to-file utility library. It allows you to asynchronously write log and at the same time print console messages with a one, very short, command. LogScribe automatically splits the log files as they get too large.
 
 `log('Hello World');`
 I just logged "Hello World" into a log file and printed it to my console.
