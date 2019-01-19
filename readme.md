@@ -1,6 +1,6 @@
 # LogScribe
 
-[alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe_192.png "Logscribe")
+![alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe_192.png "Logscribe")
 
 How can a log be a scribe, you might wonder.
 
