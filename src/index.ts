@@ -154,14 +154,14 @@ export const getLogStr = (
  * Prints out a message.
  * @param {any} msg - The message text.
  * @param {string} tag - Tag to be used, if any.
- * @param {Date} date - Date, if any.
  * @param {IglobalOptions} options - Custom options, if any.
+ * @param {Date} date - Date, if any.
  */
 export const print = (
   msg: any,
   tag?: string,
-  date?: Date,
-  options?: IglobalOptions
+  options?: IglobalOptions,
+  date?: Date
 ): void => {
   try {
     const opt = options ? readLocalOptions(options) : globalOptions;
@@ -202,7 +202,7 @@ export const log = (
         const date = new Date();
         fs.appendFile(filepath, getLogStr(msg, date, tag, opt), 'utf8', err => {
           if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-            print(msg, tag, date, opt);
+            print(msg, tag, opt, date);
           }
         });
       }
@@ -236,7 +236,7 @@ export const logSync = (
       const date = new Date();
       fs.appendFileSync(filepath, getLogStr(msg, date, tag, opt), 'utf8');
       if (doPrint === true || (doPrint === undefined && opt.printConsole)) {
-        print(msg, tag, date, opt);
+        print(msg, tag, opt, date);
       }
     }
   } catch {
