@@ -130,14 +130,13 @@ export const getLogStr = (
   options?: IglobalOptions
 ): string => {
   try {
-    const warn = typeof msg === 'string' && msg[0] === '!' && msg[1] === '!';
-    let str = warn ? '\x1b[31m' : '\x1b[32m';
+    let str = '';
     // Attach tag.
     if (typeof tag === 'string' && tag !== '') {
       str += `[${tag}]\n`;
     }
     // Attach date.
-    str += `[${date}]\x1b[0m\n`;
+    str += `[${date}]\n`;
     // Attach message.
     str +=
       typeof msg === 'string'
