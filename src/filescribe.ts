@@ -8,6 +8,7 @@ const appDir = path.dirname(require.main.filename);
 const globalOptions: IglobalOptions = {
   dirPath: appDir,
   disabledTags: [],
+  filePrefix: 'application',
   maxMsgLength: 8192,
   printConsole: true,
 };
@@ -46,15 +47,21 @@ const readLocalOptions = (options: IglobalOptions): IglobalOptions => {
 /**
  * Returns a file path.
  * @param {string} dirPath - A custom or default directory path.
+ * @param {string} filePrefix - Prefix for the file.
+ * @returns {Promise<string>} - A full absolute filepath.
  */
-const getFilePath = (dirPath: string): Promise<string> => {
+const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
   return new Promise((resolve, reject) => {
     const dir = path.resolve(dirPath);
     fs.readdir(dir, (err, files) => {
       if (!err) {
+        const r =
+          filePrefix === 'application'
+            ? regex
+            : new RegExp(`^${filePrefix}_.*log`, 'g');
         // Returns e.g. application_2019_01_19_123123123.log.
         const file = files
-          .filter(f => f.match(regex))
+          .filter(f => f.match(r))
           .find(f => fs.statSync(`${dir}\\${f}`).size < maxFileSize);
         if (file) {
           resolve(`${dir}\\${file}`);
@@ -62,11 +69,12 @@ const getFilePath = (dirPath: string): Promise<string> => {
           // Generate a filename as no suitable file was found.
           const d = new Date();
           resolve(
-            `${dir}\\application_${d.getFullYear()}_${d.getMonth()}_` +
+            `${dir}\\${filePrefix}_${d.getFullYear()}_${d.getMonth()}_` +
               `${d.getDate()}_${d.getTime()}.log`
           );
         }
       } else {
+        // TODO: create folders.
         reject('');
       }
     });
@@ -89,7 +97,7 @@ export const log = (
 ): void => {
   new Promise(() => {
     const opt = options ? readLocalOptions(options) : globalOptions;
-    getFilePath(opt.dirPath).then((filepath: string) => {
+    getFilePath(opt.dirPath, opt.filePrefix).then((filepath: string) => {
       if (
         // Empty path means something failed.
         filepath !== '' &&

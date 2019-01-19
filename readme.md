@@ -53,20 +53,24 @@ We also set console printting to false, which means the result can be seen from 
 ### Default global options
 These options are used by default. You can change the options locally log-by-log or globally.
 ```
+dirPath: 'your project root',
 disabledTags: [],
+filePrefix: 'application',
 maxMsgLength: 8192,
-dirPath: '',
 printConsole: true,
 ```
+
+#### dirPath: string
+A custom directory path for the log file. E.g. `'c:/logs'`. The application must have a write access to the path.
 
 #### disabledTags: Array\<string\>
 Tags that won't log at the current moment.
 
+#### filePrefix: string
+A custom prefix for the log files. For example 'custom' would generate `custom_2019_01_19_12341234.log` -files.
+
 #### maxMsgLength: number
 After how many characters will the message be spliced?
-
-#### dirPath: string
-A custom directory path for the log file. E.g. `'c:/logs'`. The application must have a write access to the path.
 
 #### printConsole: boolean
 Whether to do console.log() print outs of the messages.
