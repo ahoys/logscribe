@@ -111,7 +111,7 @@ log(
 
 ## Performance
 Here are the v.1.0.0 performance readings (i5-7600K):
-- filescribe.log: **0.162ms**
+- filescribe.log: **0.976ms**
 - filescribe.getGlobalOptions: **0.015ms**
 - filescribe.setGlobalOptions: **0.123ms**
 

@@ -5,20 +5,20 @@ const f = require('./dist/index');
 
 /**
  * Logs:
- * y2019/m01/d18
- * fn_log: 0.162ms
+ * y2019/m01/d19
+ * fn_log: 0.976ms
  * fn_getGlobalOptions: 0.015ms
  * fn_setGlobalOptions: 0.123ms
  */
 
 // log
 console.time('fnc_log');
-f.log('msg', 'tag', false);
+f.log('msg', 'tag');
 console.timeEnd('fnc_log');
 
 // getGlobalOptions
 console.time('fnc_getGlobalOptions');
-const set = f.getGlobalOptions();
+f.getGlobalOptions();
 console.timeEnd('fnc_getGlobalOptions');
 
 // setGlobalOptions
