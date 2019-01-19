@@ -140,7 +140,7 @@ export const print = (msg: any, tag?: string, date?: Date): void => {
       console.log('\x1b[32m', `${pStr}[${h}:${m}] -\x1b[0m`, msg);
     }
   } catch {
-    return;
+    console.log('');
   }
 };
 
