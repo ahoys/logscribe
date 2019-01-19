@@ -60,6 +60,11 @@ Yarn
 
 `yarn add logscribe`
 
+## TODO
+Things to do before releasing.
+- Testing, testing, testing.
+- Typescript types.
+
 ## Usage
 
 ### log()
