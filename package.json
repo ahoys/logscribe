@@ -9,17 +9,19 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress --config webpack.config.js",
-    "test": "cross-env NODE_ENV=test jest",
+    "build": "webpack --progress --config webpack.config.js",
+    "test": "cross-env NODE_ENV=testing jest",
     "lint": "./node_modules/.bin/tslint --project ./ --fix ./src/**",
     "benchmark": "node performance"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.13",
     "@types/node": "^10.12.18",
     "clean-webpack-plugin": "^1.0.0",
     "cross-env": "^5.2.0",
     "jest": "^23.6.0",
     "prettier": "^1.15.3",
+    "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.17.0",

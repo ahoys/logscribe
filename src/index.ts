@@ -1,7 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-require.main = process.mainModule;
-const appDir = path.dirname(require.main.filename);
+const isTesting = process.env.NODE_ENV === 'testing';
+if (!isTesting) {
+  require.main = process.mainModule;
+}
+const appDir = isTesting
+  ? path.resolve(__dirname)
+  : path.dirname(require.main.filename);
 
 export interface IglobalOptions {
   dirPath?: string;
@@ -280,6 +285,15 @@ export const setGlobalOptions = (options: IglobalOptions): IglobalOptions => {
 };
 
 // Used for tests.
-export const forTesting = { readLocalOptions, getFilePath, getFilePathSync };
+export const testUtil = (): any => {
+  return isTesting
+    ? {
+        getFilePath,
+        getFilePathSync,
+        globalOptions,
+        readLocalOptions,
+      }
+    : {};
+};
 
 export default log;
