@@ -9,6 +9,7 @@
       true,
       "./.prettierrc"
     ],
-    "no-console": false
+    "no-console": false,
+    "no-unused-expression": [true, "allow-new"]
   }
 }
