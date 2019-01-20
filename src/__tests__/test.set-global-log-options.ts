@@ -1,4 +1,4 @@
-import { getGlobalLogOptions, setGlobalLogOptions, testUtil } from '../index';
+import { getGlobalLogOptions, setGlobalLogOptions } from '../index';
 
 test('You can set globalLogOptions', () => {
   setGlobalLogOptions({ maxMsgLength: 700 });

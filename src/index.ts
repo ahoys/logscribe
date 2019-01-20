@@ -101,7 +101,7 @@ const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
  * @param {string} filePrefix - Prefix for the file.
  * @returns {Promise<string>} - A full absolute filepath.
  */
-const getFilePathSync = (dirPath: string, filePrefix): string => {
+const getFilePathSync = (dirPath: string, filePrefix = 'application'): string => {
   try {
     const dPath = path.resolve(dirPath);
     const items = fs.readdirSync(dPath);
