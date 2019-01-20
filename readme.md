@@ -45,7 +45,7 @@ And this is how my `application_2019_01_19.log` now looks like.
 - log(): 0.936ms
 - logSync(): 3.126ms
 - print(): 0.587ms
-- getGlobalOptions(): 0.021ms
+- getGlobalOptions(): 0.055ms
 - setGlobalOptions(): 0.134ms
 
 ## Install

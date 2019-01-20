@@ -9,7 +9,7 @@ const f = require('./dist/index');
  * fn_log: 0.936ms
  * fn_logSync: 3.126ms
  * fn_print: 0.587ms
- * fn_getGlobalOptions: 0.021ms
+ * fn_getGlobalOptions: 0.055ms
  * fn_setGlobalOptions: 0.134ms
  */
 
