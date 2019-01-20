@@ -57,10 +57,6 @@ Yarn
 
 `yarn add logscribe`
 
-## TODO
-Things to do before releasing.
-- Testing, testing, testing.
-
 ## Usage
 
 ### log()
