@@ -1,10 +1,16 @@
 {
   "name": "logscribe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A speedy log to file utility.",
   "main": "dist/index.js",
   "author": "Ari Höysniemi <ari.hoysniemi@gmail.com> (https://github.com/ahoys)",
-  "keywords": ["log", "typescript", "splitting", "logging", "debug"],
+  "keywords": [
+    "log",
+    "typescript",
+    "splitting",
+    "logging",
+    "debug"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "webpack --progress --config webpack.config.js",
