@@ -71,8 +71,8 @@ log('Hello World', 'Example Tag', false, { filePrefix: 'myFile' });
 Parameters:
 1. **@param message {any}** - A message to be logged.
 2. **@param tag {string}** - A tag for the message **(optional)**.
-3. **@param doPrint {boolean}** - Whether to print the message into a console **(optional)**.
-4. **@param options {object}** - Various options for overriding global options **(optional)**.
+3. **@param doPrint {boolean}** - Whether to console print out the message (console.log) **(optional)**.
+4. **@param options {object}** - Various options for overriding global log options **(optional)**.
 
 ### logSync()
 Basically exactly the same as the log(), but synchronous. If it is **crucial** to log the events in a correct order, use logSync(). When saving log asynchronously (log()), two almost simultaneously triggered logs may not finish in the same order as they started. LogSync() is about 3x slower than log(), though still fast.
@@ -89,11 +89,11 @@ print('Hello World', 'Example Tag', { filePrefix: 'myFile' }, new Date());
 Parameters:
 1. **@param message {any}** - A message to be logged.
 2. **@param tag {string}** - A tag for the message **(optional)**.
-3. **@param options {object}** - Various options for overriding global options **(optional)**.
-4. **@param date {Date}** - If you want to record some different Date **(optional)**.
+3. **@param options {object}** - Various options for overriding global log options **(optional)**.
+4. **@param date {Date}** - If you want to display some different Date **(optional)**.
 
 ### getGlobalLogOptions()
-Returns the currently active global options.
+Returns the currently active global log options.
 ```
 import { getGlobalLogOptions } from 'logscribe';
 getGlobalLogOptions();
@@ -101,7 +101,7 @@ getGlobalLogOptions();
 1. **@returns {object}** - The current global settings.
 
 ### setGlobalLogOptions()
-Sets the currently active global options. Everything after this (meaning log(), print(), etc.) will be affected.
+Sets the currently active global log options. Everything after this (meaning log(), print(), etc.) will be affected.
 
 The settings below are the default settings.
 ```
@@ -116,7 +116,7 @@ getGlobalLogOptions({
 });
 ```
 Parameters:
-1. **@param options {object}** - Various options for overriding global options.
+1. **@param options {object}** - Various options for overriding global log options.
 
 Note:
 - The type of the setting must remain the same (typeof).

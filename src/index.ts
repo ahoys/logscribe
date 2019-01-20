@@ -260,17 +260,17 @@ export const logSync = (
 
 /**
  * Returns the currently active
- * global options.
- * @returns {object} - The current global options.
+ * global log options.
+ * @returns {object} - The current global log options.
  */
 export const getGlobalLogOptions = (): IglobalLogOptions => {
   return { ...globalLogOptions };
 };
 
 /**
- * Overrides either some or all of the global options.
- * @param {object} options - New custom global options.
- * @returns {object} - The current global options after the modification.
+ * Overrides either some or all of the global log options.
+ * @param {object} options - New custom global log options.
+ * @returns {object} - The current global log options after the modification.
  */
 export const setGlobalLogOptions = (
   options: IglobalLogOptions
