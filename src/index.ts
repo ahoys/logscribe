@@ -263,7 +263,7 @@ export const logSync = (
  * @returns {object} - The current global options.
  */
 export const getGlobalOptions = (): IglobalOptions => {
-  return globalOptions;
+  return { ...globalOptions };
 };
 
 /**
@@ -278,9 +278,9 @@ export const setGlobalOptions = (options: IglobalOptions): IglobalOptions => {
         globalOptions[oArr[i]] = options[oArr[i]];
       }
     }
-    return globalOptions;
+    return { ...globalOptions };
   } catch {
-    return globalOptions;
+    return { ...globalOptions };
   }
 };
 
