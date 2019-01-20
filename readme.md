@@ -1,7 +1,5 @@
 # LogScribe
 
-![alt text](https://github.com/ahoys/logscribe/blob/master/assets/logscribe_192.png "Logscribe")
-
 # <a href='https://github.com/ahoys/logscribe'><img src='https://github.com/ahoys/logscribe/blob/master/assets/logscribe_192.png' height='192' alt='LogScribe Logo' /></a>
 
 How can a log be a scribe, you might wonder.
