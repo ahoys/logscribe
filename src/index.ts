@@ -8,7 +8,7 @@ const appDir = isTesting
   ? path.resolve(__dirname)
   : path.dirname(require.main.filename);
 
-export interface IglobalOptions {
+export interface IglobalLogOptions {
   dirPath?: string;
   disabledTags?: Array<string | null>;
   filePrefix?: string;
@@ -18,7 +18,7 @@ export interface IglobalOptions {
 }
 
 // Here we have the default configuration for LogScribe.
-const globalOptions: IglobalOptions = {
+const globalLogOptions: IglobalLogOptions = {
   dirPath: appDir,
   disabledTags: [],
   filePrefix: 'application',
@@ -34,7 +34,7 @@ const regex = new RegExp(/^application_.*log/, 'g');
 const maxFileSize = 1000000;
 
 // Use these to save some precious microseconds.
-const oArr = Object.keys(globalOptions);
+const oArr = Object.keys(globalLogOptions);
 const oLen = oArr.length;
 
 /**
@@ -43,18 +43,18 @@ const oLen = oArr.length;
  * @param {object} options - User generated custom options.
  * @returns {object} - Validated options.
  */
-const readLocalOptions = (options: IglobalOptions): IglobalOptions => {
+const readLocalOptions = (options: IglobalLogOptions): IglobalLogOptions => {
   try {
-    const custom: IglobalOptions = {};
+    const custom: IglobalLogOptions = {};
     for (let i = 0; i < oLen; i++) {
       custom[oArr[i]] =
-        typeof options[oArr[i]] === typeof globalOptions[oArr[i]]
+        typeof options[oArr[i]] === typeof globalLogOptions[oArr[i]]
           ? options[oArr[i]]
-          : globalOptions[oArr[i]];
+          : globalLogOptions[oArr[i]];
     }
     return custom;
   } catch {
-    return globalOptions;
+    return globalLogOptions;
   }
 };
 
@@ -135,13 +135,13 @@ const getFilePathSync = (dirPath: string, filePrefix): string => {
  * @param {any} msg - A message to be logged.
  * @param {Date} date - Datetime of the log.
  * @param {string} tag - A tag of the log, if any.
- * @param {IglobalOptions} options - Custom options, if any.
+ * @param {IglobalLogOptions} options - Custom options, if any.
  */
 export const getLogStr = (
   msg: any,
   date: Date,
   tag?: string,
-  options?: IglobalOptions
+  options?: IglobalLogOptions
 ): string => {
   try {
     let str = '';
@@ -167,17 +167,17 @@ export const getLogStr = (
  * Prints out a message.
  * @param {any} msg - The message text.
  * @param {string} tag - Tag to be used, if any.
- * @param {IglobalOptions} options - Custom options, if any.
+ * @param {IglobalLogOptions} options - Custom options, if any.
  * @param {Date} date - Date, if any.
  */
 export const print = (
   msg: any,
   tag?: string,
-  options?: IglobalOptions,
+  options?: IglobalLogOptions,
   date?: Date
 ): void => {
   try {
-    const opt = options ? readLocalOptions(options) : globalOptions;
+    const opt = options ? readLocalOptions(options) : globalLogOptions;
     const pStr = tag && tag !== '' ? `[${tag}]` : '';
     const d = date || new Date();
     const h = ('0' + d.getHours()).slice(-2);
@@ -201,10 +201,10 @@ export const log = (
   msg: string,
   tag: string,
   doPrint: boolean,
-  options: IglobalOptions
+  options: IglobalLogOptions
 ): void => {
   new Promise(() => {
-    const opt = options ? readLocalOptions(options) : globalOptions;
+    const opt = options ? readLocalOptions(options) : globalLogOptions;
     getFilePath(opt.dirPath, opt.filePrefix).then((filepath: string) => {
       if (
         // Empty path means something failed.
@@ -235,10 +235,10 @@ export const logSync = (
   msg: string,
   tag: string,
   doPrint: boolean,
-  options: IglobalOptions
+  options: IglobalLogOptions
 ): void => {
   try {
-    const opt = options ? readLocalOptions(options) : globalOptions;
+    const opt = options ? readLocalOptions(options) : globalLogOptions;
     const filepath = getFilePathSync(opt.dirPath, opt.filePrefix);
     if (
       // Empty path means something failed.
@@ -262,8 +262,8 @@ export const logSync = (
  * global options.
  * @returns {object} - The current global options.
  */
-export const getGlobalOptions = (): IglobalOptions => {
-  return { ...globalOptions };
+export const getGlobalLogOptions = (): IglobalLogOptions => {
+  return { ...globalLogOptions };
 };
 
 /**
@@ -271,16 +271,18 @@ export const getGlobalOptions = (): IglobalOptions => {
  * @param {object} options - New custom global options.
  * @returns {object} - The current global options after the modification.
  */
-export const setGlobalOptions = (options: IglobalOptions): IglobalOptions => {
+export const setGlobalLogOptions = (
+  options: IglobalLogOptions
+): IglobalLogOptions => {
   try {
     for (let i = 0; i < oLen; i++) {
-      if (typeof options[oArr[i]] === typeof globalOptions[oArr[i]]) {
-        globalOptions[oArr[i]] = options[oArr[i]];
+      if (typeof options[oArr[i]] === typeof globalLogOptions[oArr[i]]) {
+        globalLogOptions[oArr[i]] = options[oArr[i]];
       }
     }
-    return { ...globalOptions };
+    return { ...globalLogOptions };
   } catch {
-    return { ...globalOptions };
+    return { ...globalLogOptions };
   }
 };
 
@@ -290,7 +292,7 @@ export const testUtil = (): any => {
     ? {
         getFilePath,
         getFilePathSync,
-        globalOptions,
+        globalLogOptions,
         readLocalOptions,
       }
     : {};

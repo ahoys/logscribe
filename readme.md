@@ -45,8 +45,8 @@ And this is how my `application_2019_01_19.log` now looks like.
 - log(): 0.936ms
 - logSync(): 3.126ms
 - print(): 0.587ms
-- getGlobalOptions(): 0.055ms
-- setGlobalOptions(): 0.134ms
+- getGlobalLogOptions(): 0.055ms
+- setGlobalLogOptions(): 0.134ms
 
 ## Install
 
@@ -99,21 +99,21 @@ Parameters:
 3. **@param options {object}** - Various options for overriding global options **(optional)**.
 4. **@param date {Date}** - If you want to record some different Date **(optional)**.
 
-### getGlobalOptions()
+### getGlobalLogOptions()
 Returns the currently active global options.
 ```
-import { getGlobalOptions } from 'logscribe';
-getGlobalOptions();
+import { getGlobalLogOptions } from 'logscribe';
+getGlobalLogOptions();
 ```
 1. **@returns {object}** - The current global settings.
 
-### setGlobalOptions()
+### setGlobalLogOptions()
 Sets the currently active global options. Everything after this (meaning log(), print(), etc.) will be affected.
 
 The settings below are the default settings.
 ```
-import { setGlobalOptions } from 'logscribe';
-getGlobalOptions({
+import { setGlobalLogOptions } from 'logscribe';
+getGlobalLogOptions({
   dirPath: './',
   disabledTags: [],
   filePrefix: 'application',

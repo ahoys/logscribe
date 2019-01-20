@@ -9,8 +9,8 @@ const f = require('./dist/index');
  * fn_log: 0.936ms
  * fn_logSync: 3.126ms
  * fn_print: 0.587ms
- * fn_getGlobalOptions: 0.055ms
- * fn_setGlobalOptions: 0.134ms
+ * fn_getGlobalLogOptions: 0.055ms
+ * fn_setGlobalLogOptions: 0.134ms
  */
 
 console.log('\n');
@@ -30,18 +30,18 @@ console.time('fnc_print');
 f.print('msg', 'print');
 console.timeEnd('fnc_print');
 
-// getGlobalOptions
-console.time('fnc_getGlobalOptions');
-f.getGlobalOptions();
-console.timeEnd('fnc_getGlobalOptions');
+// getGlobalLogOptions
+console.time('fnc_getGlobalLogOptions');
+f.getGlobalLogOptions();
+console.timeEnd('fnc_getGlobalLogOptions');
 
-// setGlobalOptions
-console.time('fnc_setGlobalOptions');
-f.setGlobalOptions({
+// setGlobalLogOptions
+console.time('fnc_setGlobalLogOptions');
+f.setGlobalLogOptions({
   dirPath: './',
   disabledTags: ['d-tag'],
   filePrefix: 'custom',
   maxMsgLength: 1024,
   printConsole: false,
 });
-console.timeEnd('fnc_setGlobalOptions');
+console.timeEnd('fnc_setGlobalLogOptions');
