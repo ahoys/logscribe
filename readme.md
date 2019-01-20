@@ -40,7 +40,6 @@ And this is how my `application_2019_01_19.log` now looks like.
 - Log-specific options.
 
 ### Specs
-- Bundle only ~4KB.
 - log(): 0.936ms
 - logSync(): 3.126ms
 - print(): 0.587ms

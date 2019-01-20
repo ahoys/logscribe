@@ -29,6 +29,10 @@ module.exports = {
     extensions: ['.ts', '.js'],
     modules: ['node_modules'],
   },
+  optimization: {
+    // This is a library. No need to minify.
+    minimize: false
+  },
   plugins: [
     // Cleans the destination folder before building new.
     new CleanWebpackPlugin([dist], { root }),
