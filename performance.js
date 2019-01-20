@@ -8,8 +8,8 @@ const f = require('./dist/index');
  * y2019/m01/d19
  * fn_log: 0.936ms
  * fn_logSync: 3.126ms
- * fn_print: 0.587ms
- * fn_getGlobalLogOptions: 0.055ms
+ * fn_print: 0.524ms
+ * fn_getGlobalLogOptions: 0.052ms
  * fn_setGlobalLogOptions: 0.134ms
  */
 

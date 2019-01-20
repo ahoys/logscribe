@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true,
     "declaration": true,
     "lib": ["es7"],
     "module": "commonjs",

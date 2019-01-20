@@ -42,8 +42,8 @@ And this is how my `application_2019_01_19.log` now looks like.
 ### Specs
 - log(): 0.936ms
 - logSync(): 3.126ms
-- print(): 0.587ms
-- getGlobalLogOptions(): 0.055ms
+- print(): 0.524ms
+- getGlobalLogOptions(): 0.052ms
 - setGlobalLogOptions(): 0.134ms
 
 ## Install
@@ -99,26 +99,32 @@ getGlobalLogOptions();
 ```
 1. **@returns {object}** - The current global settings.
 
-### setGlobalLogOptions()
-Sets the currently active global log options. Everything after this (meaning log(), print(), etc.) will be affected.
+### setDirPath(value: string)
+Set path for the log files. The path must exist and the application must have writing permissions to the path. Note that this is a directory path, not a full filepath. See `setFilePrefix()` for more.
 
-The settings below are the default settings.
-```
-import { setGlobalLogOptions } from 'logscribe';
-getGlobalLogOptions({
-  dirPath: './',
-  disabledTags: [],
-  filePrefix: 'application',
-  maxMsgLength: 8192,
-  printColor: '\x1b[32m',
-  printConsole: true,
-});
-```
-Parameters:
-1. **@param options {object}** - Various options for overriding global log options.
+`Default: <project root>`
 
-Note:
-- The type of the setting must remain the same (typeof).
-- You don't have to replace them all, just mention those you'd like to change.
-- printColor affects only the tag & date section of print().
-- dirPath must exist with a writing permission.
+### setDisabledTags(value: string[])
+Messages that have these tags won't be logged or printed. If `"*"` is added then nothing will be saved/displayed.
+
+`Default: []`
+
+### setFilePrefix(value: string)
+Prefix for the log file. For example `"custom"` would mean `custom_2019_01_20.log` -files.
+
+`Default: "application"`
+
+### setMaxMsgLength(value: number)
+Maxmimum length (chars) of a message. If a message is longer than this value, the message will be cut.
+
+`Default: 8192`
+
+### setPrintColor(value: string)
+Tag and time coloring. This is useful to mark something more crucial by coloring it to something else. Note that this affects only the console, not logging.
+
+`Default: "\x1b[32m" (green)`
+
+### setPrintConsole(value: boolean)
+Whether to print out what is logged. Note that disabling this won't disable print().
+
+`Default: true`

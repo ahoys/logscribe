@@ -6,15 +6,16 @@ if (!isTesting) {
 }
 const appDir = isTesting
   ? path.resolve(__dirname)
-  : path.dirname(require.main.filename);
+  : path.dirname(require && require.main ? require.main.filename : '');
 
 export interface IglobalLogOptions {
-  dirPath?: string;
-  disabledTags?: Array<string | null>;
-  filePrefix?: string;
-  maxMsgLength?: number;
-  printColor?: string;
-  printConsole?: boolean;
+  [key: string]: string | string[] | number | boolean;
+  dirPath: string;
+  disabledTags: string[];
+  filePrefix: string;
+  maxMsgLength: number;
+  printColor: string;
+  printConsole: boolean;
 }
 
 // Here we have the default configuration for LogScribe.
@@ -33,10 +34,6 @@ const regex = new RegExp(/^application_.*log/, 'g');
 // Maximum size of a log file.
 const maxFileSize = 1000000;
 
-// Use these to save some precious microseconds.
-const oArr = Object.keys(globalLogOptions);
-const oLen = oArr.length;
-
 /**
  * Reads, validates and returns customized options for a
  * log run.
@@ -45,13 +42,15 @@ const oLen = oArr.length;
  */
 const readLocalLogOptions = (options: IglobalLogOptions): IglobalLogOptions => {
   try {
-    const custom: IglobalLogOptions = {};
-    for (let i = 0; i < oLen; i++) {
-      custom[oArr[i]] =
-        typeof options[oArr[i]] === typeof globalLogOptions[oArr[i]]
-          ? options[oArr[i]]
-          : globalLogOptions[oArr[i]];
-    }
+    const custom: IglobalLogOptions = { ...globalLogOptions };
+    Object.keys(options).forEach(key => {
+      if (
+        typeof options[key] === typeof globalLogOptions[key] &&
+        options[key].constructor === globalLogOptions[key].constructor
+      ) {
+        custom[key] = options[key];
+      }
+    });
     return custom;
   } catch {
     return globalLogOptions;
@@ -64,7 +63,7 @@ const readLocalLogOptions = (options: IglobalLogOptions): IglobalLogOptions => {
  * @param {string} filePrefix - Prefix for the file.
  * @returns {Promise<string>} - A full absolute filepath.
  */
-const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
+const getFilePath = (dirPath: string, filePrefix?: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     const dir = path.resolve(dirPath);
     fs.readdir(dir, (err, items) => {
@@ -157,7 +156,7 @@ export const getLogStr = (
     // Attach message.
     str +=
       typeof msg === 'string'
-        ? `${msg.substr(0, options.maxMsgLength)}\n\n`
+        ? `${msg.substr(0, options ? options.maxMsgLength : 8192)}\n\n`
         : `${msg}\n\n`;
     // Return the result.
     return str;
@@ -207,10 +206,12 @@ export const log = (
 ): void => {
   new Promise(() => {
     const opt = options ? readLocalLogOptions(options) : globalLogOptions;
-    getFilePath(opt.dirPath, opt.filePrefix).then((filepath: string) => {
+    getFilePath(opt.dirPath || '', opt.filePrefix).then((filepath: string) => {
       if (
         // Empty path means something failed.
         filepath !== '' &&
+        opt &&
+        opt.disabledTags &&
         !opt.disabledTags.includes('*') &&
         !opt.disabledTags.includes(tag)
       ) {
@@ -240,10 +241,12 @@ export const logSync = (
 ): void => {
   try {
     const opt = options ? readLocalLogOptions(options) : globalLogOptions;
-    const filepath = getFilePathSync(opt.dirPath, opt.filePrefix);
+    const filepath = getFilePathSync(opt.dirPath || '', opt.filePrefix);
     if (
       // Empty path means something failed.
       filepath !== '' &&
+      opt &&
+      opt.disabledTags &&
       !opt.disabledTags.includes('*') &&
       !opt.disabledTags.includes(tag)
     ) {
@@ -276,14 +279,88 @@ export const setGlobalLogOptions = (
   options: IglobalLogOptions
 ): IglobalLogOptions => {
   try {
-    for (let i = 0; i < oLen; i++) {
-      if (typeof options[oArr[i]] === typeof globalLogOptions[oArr[i]]) {
-        globalLogOptions[oArr[i]] = options[oArr[i]];
+    Object.keys(options).forEach(key => {
+      if (typeof options[key] === typeof globalLogOptions[key]) {
+        globalLogOptions[key] = options[key];
       }
-    }
+    });
     return { ...globalLogOptions };
   } catch {
     return { ...globalLogOptions };
+  }
+};
+
+/**
+ * Sets global log setting: dirPath.
+ * @param {string} value
+ */
+export const setDirPath = (value: string): void => {
+  try {
+    globalLogOptions.dirPath = String(value);
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Sets global log setting: disabledTags.
+ * @param {string[]} value
+ */
+export const setDisabledTags = (value: string[]): void => {
+  try {
+    if (typeof value === 'object' && value.constructor === Array) {
+      globalLogOptions.disabledTags = value;
+    }
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Sets global log setting: filePrefix.
+ * @param {string} value
+ */
+export const setFilePrefix = (value: string): void => {
+  try {
+    globalLogOptions.filePrefix = String(value);
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Sets global log setting: maxMsgLength.
+ * @param {number} value
+ */
+export const setMaxMsgLength = (value: number): void => {
+  try {
+    globalLogOptions.maxMsgLength = Number(value);
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Sets global log setting: printColor.
+ * @param {string} value
+ */
+export const setPrintColor = (value: string): void => {
+  try {
+    globalLogOptions.printColor = String(value);
+  } catch {
+    return;
+  }
+};
+
+/**
+ * Sets global log setting: printConsole.
+ * @param {boolean} value
+ */
+export const setPrintConsole = (value: boolean): void => {
+  try {
+    globalLogOptions.printConsole = Boolean(value);
+  } catch {
+    return;
   }
 };
 
