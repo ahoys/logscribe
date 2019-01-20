@@ -26,7 +26,7 @@ test('getFilePathreturns correct paths.', () => {
   const reference = `${path.resolve(__dirname)}\\application_`;
   expect.assertions(1);
   return getFilePath('./src/__tests__', 'application')
-    .then((filepath) => {
+    .then((filepath: string) => {
       expect(filepath.includes(reference)).toBe(true);
     });
 });
