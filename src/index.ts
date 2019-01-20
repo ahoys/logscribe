@@ -43,7 +43,7 @@ const oLen = oArr.length;
  * @param {object} options - User generated custom options.
  * @returns {object} - Validated options.
  */
-const readLocalOptions = (options: IglobalLogOptions): IglobalLogOptions => {
+const readLocalLogOptions = (options: IglobalLogOptions): IglobalLogOptions => {
   try {
     const custom: IglobalLogOptions = {};
     for (let i = 0; i < oLen; i++) {
@@ -101,7 +101,10 @@ const getFilePath = (dirPath: string, filePrefix): Promise<string> => {
  * @param {string} filePrefix - Prefix for the file.
  * @returns {Promise<string>} - A full absolute filepath.
  */
-const getFilePathSync = (dirPath: string, filePrefix = 'application'): string => {
+const getFilePathSync = (
+  dirPath: string,
+  filePrefix = 'application'
+): string => {
   try {
     const dPath = path.resolve(dirPath);
     const items = fs.readdirSync(dPath);
@@ -177,7 +180,7 @@ export const print = (
   date?: Date
 ): void => {
   try {
-    const opt = options ? readLocalOptions(options) : globalLogOptions;
+    const opt = options ? readLocalLogOptions(options) : globalLogOptions;
     const pStr = tag && tag !== '' ? `[${tag}]` : '';
     const d = date || new Date();
     const h = ('0' + d.getHours()).slice(-2);
@@ -204,7 +207,7 @@ export const log = (
   options: IglobalLogOptions
 ): void => {
   new Promise(() => {
-    const opt = options ? readLocalOptions(options) : globalLogOptions;
+    const opt = options ? readLocalLogOptions(options) : globalLogOptions;
     getFilePath(opt.dirPath, opt.filePrefix).then((filepath: string) => {
       if (
         // Empty path means something failed.
@@ -238,7 +241,7 @@ export const logSync = (
   options: IglobalLogOptions
 ): void => {
   try {
-    const opt = options ? readLocalOptions(options) : globalLogOptions;
+    const opt = options ? readLocalLogOptions(options) : globalLogOptions;
     const filepath = getFilePathSync(opt.dirPath, opt.filePrefix);
     if (
       // Empty path means something failed.
@@ -293,7 +296,7 @@ export const testUtil = (): any => {
         getFilePath,
         getFilePathSync,
         globalLogOptions,
-        readLocalOptions,
+        readLocalLogOptions,
       }
     : {};
 };

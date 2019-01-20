@@ -5,7 +5,7 @@ const {
   getFilePath,
   getFilePathSync,
   globalLogOptions,
-  readLocalOptions,
+  readLocalLogOptions,
 } = testUtil();
 
 test('getFilePathSync filepath is of correct type.', () => {
@@ -27,7 +27,6 @@ test('getFilePathreturns correct paths.', () => {
   expect.assertions(1);
   return getFilePath('./src/__tests__', 'application')
     .then((filepath) => {
-      console.log('ha', filepath);
       expect(filepath.includes(reference)).toBe(true);
     });
 });
@@ -39,17 +38,17 @@ test('Types of globalLogOptions are correct.', () => {
   expect(types).toEqual(shouldBe);
 });
 
-test('readLocalOptions returns an object.', () => {
-  expect(typeof readLocalOptions(globalLogOptions)).toBe('object');
+test('readLocalLogOptions returns an object.', () => {
+  expect(typeof readLocalLogOptions(globalLogOptions)).toBe('object');
 });
 
-test('readLocalOptions returns globalLogOptions.', () => {
-  expect(readLocalOptions(globalLogOptions)).toEqual(globalLogOptions);
+test('readLocalLogOptions returns globalLogOptions.', () => {
+  expect(readLocalLogOptions(globalLogOptions)).toEqual(globalLogOptions);
 });
 
-test('readLocalOptions returns modified globalLogOptions.', () => {
+test('readLocalLogOptions returns modified globalLogOptions.', () => {
   const opt = { ...globalLogOptions };
   opt.maxMsgLength = 100;
-  expect(readLocalOptions(opt)).toEqual(opt);
-  expect(readLocalOptions(opt)).not.toEqual(globalLogOptions);
+  expect(readLocalLogOptions(opt)).toEqual(opt);
+  expect(readLocalLogOptions(opt)).not.toEqual(globalLogOptions);
 });
