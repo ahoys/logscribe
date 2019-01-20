@@ -172,14 +172,13 @@ export const getLogStr = (
  * @param {string} tag - Tag to be used, if any.
  * @param {IglobalLogOptions} options - Custom options, if any.
  * @param {Date} date - Date, if any.
- * @returns {string} - The full message that was printed.
  */
 export const print = (
   msg: any,
   tag?: string,
   options?: IglobalLogOptions,
   date?: Date
-): string => {
+): void => {
   try {
     const opt = options ? readLocalLogOptions(options) : globalLogOptions;
     const pStr = tag && tag !== '' ? `[${tag}]` : '';
@@ -188,10 +187,8 @@ export const print = (
     const m = ('0' + d.getMinutes()).slice(-2);
     const s = ('0' + d.getSeconds()).slice(-2);
     console.log(`${opt.printColor}${pStr}[${h}:${m}:${s}] -\x1b[0m`, msg);
-    return msg;
   } catch {
     console.log('');
-    return '';
   }
 };
 
