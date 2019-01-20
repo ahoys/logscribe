@@ -1,6 +1,6 @@
 {
   "name": "logscribe",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A speedy log to file utility.",
   "main": "dist/index.js",
   "author": "Ari Höysniemi <ari.hoysniemi@gmail.com> (https://github.com/ahoys)",
