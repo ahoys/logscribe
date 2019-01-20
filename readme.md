@@ -37,7 +37,6 @@ And this is how my `application_2019_01_19.log` now looks like.
 - Custom log prefixes.
 - Console colors.
 - Timestamps and tags.
-- Everything relevant can be configured.
 - Log-specific options.
 
 ### Specs
