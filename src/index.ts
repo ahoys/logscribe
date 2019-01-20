@@ -198,7 +198,6 @@ export const print = (
  * @param {string} tag - A tag for the message.
  * @param {boolean} doPrint - Whether to print console.log.
  * @param {object} options - Custom options for the execution.
- * @returns {void} - The generated string.
  */
 export const log = (
   msg: string,
@@ -232,7 +231,6 @@ export const log = (
  * @param {string} tag - A tag for the message.
  * @param {boolean} doPrint - Whether to print console.log.
  * @param {object} options - Custom options for the execution.
- * @returns {void} - The generated string.
  */
 export const logSync = (
   msg: string,
