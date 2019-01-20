@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "A speedy log to file utility.",
   "main": "dist/index.js",
-  "author": {
-    "name": "Ari Höysniemi",
-    "url": "https://github.com/ahoys"
-  },
+  "author": "Ari Höysniemi <ari.hoysniemi@gmail.com> (https://github.com/ahoys)",
+  "keywords": ["log", "typescript", "splitting", "logging", "debug"],
   "license": "MIT",
   "scripts": {
     "build": "webpack --progress --config webpack.config.js",
@@ -35,8 +33,9 @@
     "type": "git",
     "url": "git://github.com/ahoys/logscribe.git"
   },
+  "bugs": "https://github.com/ahoys/logscribe/issues",
   "files": [
-    "dist/index.js"
+    "dist"
   ],
-  "types": "index.d.ts"
+  "types": "dist/index.d.ts"
 }
