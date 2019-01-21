@@ -1,47 +1,63 @@
-const f = require('./dist/index');
+const { log, logprint, print } = require('./dist/index');
 
 // Note that results vary depending on whether the
 // application.log file already exists.
 
 /**
- * Logs:
- * y2019/m01/d19
+ * v.1.0.3
  * fn_log: 0.936ms
  * fn_logSync: 3.126ms
  * fn_print: 0.524ms
  * fn_getGlobalLogOptions: 0.052ms
  * fn_setGlobalLogOptions: 0.134ms
+ * 
+ * v.1.1.0
+ * log(): 0.251ms
+ * logprint(): 1.320ms
+ * print(): 0.317ms
  */
 
 console.log('\n');
 
-// log
-console.time('fnc_log');
-f.log('msg', 'log', false);
-console.timeEnd('fnc_log');
+console.time('log');
+log('Hello World!');
+console.timeEnd('log');
 
-// logSync
-console.time('fnc_logSync');
-f.logSync('msg', 'logSync', false);
-console.timeEnd('fnc_logSync');
+console.time('logprint');
+logprint('Hello World!');
+console.timeEnd('logprint');
 
-// print
-console.time('fnc_print');
-f.print('msg', 'print');
-console.timeEnd('fnc_print');
+console.time('print');
+print('Hello World!');
+console.timeEnd('print');
 
-// getGlobalLogOptions
-console.time('fnc_getGlobalLogOptions');
-f.getGlobalLogOptions();
-console.timeEnd('fnc_getGlobalLogOptions');
+// // log
+// console.time('fnc_log');
+// f.log('msg', 'log', false);
+// console.timeEnd('fnc_log');
 
-// setGlobalLogOptions
-console.time('fnc_setGlobalLogOptions');
-f.setGlobalLogOptions({
-  dirPath: './',
-  disabledTags: ['d-tag'],
-  filePrefix: 'custom',
-  maxMsgLength: 1024,
-  printConsole: false,
-});
-console.timeEnd('fnc_setGlobalLogOptions');
+// // logSync
+// console.time('fnc_logSync');
+// f.logSync('msg', 'logSync', false);
+// console.timeEnd('fnc_logSync');
+
+// // print
+// console.time('fnc_print');
+// f.print('msg', 'print');
+// console.timeEnd('fnc_print');
+
+// // getGlobalLogOptions
+// console.time('fnc_getGlobalLogOptions');
+// f.getGlobalLogOptions();
+// console.timeEnd('fnc_getGlobalLogOptions');
+
+// // setGlobalLogOptions
+// console.time('fnc_setGlobalLogOptions');
+// f.setGlobalLogOptions({
+//   dirPath: './',
+//   disabledTags: ['d-tag'],
+//   filePrefix: 'custom',
+//   maxMsgLength: 1024,
+//   printConsole: false,
+// });
+// console.timeEnd('fnc_setGlobalLogOptions');
