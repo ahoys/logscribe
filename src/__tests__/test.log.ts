@@ -28,7 +28,7 @@ test('log() returns a formatted message.', () => {
     });
 });
 
-test('log() returns a formatted message.', () => {
+test('log() returns a formatted message with a tag.', () => {
   expect.assertions(1);
   const ls = logscribe('tag');
   const d = new Date();
@@ -38,6 +38,19 @@ test('log() returns a formatted message.', () => {
         `${d}\n` +
         '[tag]\n' +
         'hello\n\n'
+      );
+    });
+});
+
+test('log() returns a formatted multi-part message.', () => {
+  expect.assertions(1);
+  const d = new Date();
+  return log('hello', 'how are you')
+    .then((r) => {
+      expect(r).toBe(
+        `${d}\n` +
+        'hello\n' +
+        'how are you\n\n'
       );
     });
 });
