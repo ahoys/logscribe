@@ -1,4 +1,4 @@
-// import * as fs from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 // Testing environment doesn't understand require.main and such.
@@ -24,24 +24,22 @@ export interface IlogScribe {
 
 export interface Isettings {
   logDirPath: string;
-  logMaxLength: number;
   logMaxSize: number;
   logPrefix: string;
   printDisabled: boolean;
-  printMaxLength: number;
   printTagColor: string;
 }
 
 // Settings -------------------------------------------------------------------
 const settings: Isettings = {
   logDirPath: appDir,
-  logMaxLength: 10240,
   logMaxSize: 1024000,
   logPrefix: 'application',
   printDisabled: process.env.NODE_ENV === 'production',
-  printMaxLength: 1024,
   printTagColor: '\x1b[36m',
 };
+
+let regExp = new RegExp(`^${settings.logPrefix}_.*log`, 'g');
 
 // LogScribe utility methods --------------------------------------------------
 export const getTagForPrint = (tag: string, color?: string): string => {
@@ -64,15 +62,9 @@ export const getDateForPrint = (): string => {
   }
 };
 
-export const getTagAndDateForLog = (tag?: string): string => {
+export const getTagForLog = (tag?: string): string => {
   try {
-    const d = new Date();
-    const h = ('0' + d.getHours()).slice(-2);
-    const m = ('0' + d.getMinutes()).slice(-2);
-    const s = ('0' + d.getSeconds()).slice(-2);
-    return typeof tag === 'string' && tag !== ''
-      ? `[${tag}]\n[${h}:${m}:${s}]\n`
-      : `[${h}:${m}:${s}]\n`;
+    return typeof tag === 'string' && tag !== '' ? `[${tag}]` : '';
   } catch {
     return '';
   }
@@ -81,7 +73,39 @@ export const getTagAndDateForLog = (tag?: string): string => {
 // LogScribe public methods ---------------------------------------------------
 export const log = (...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
-    // console.log(...payload);
+    fs.readdir(settings.logDirPath, (err, items) => {
+      if (err) {
+        reject('');
+      } else {
+        const existingLog = items
+          .filter(f => f.match(regExp))
+          .find(
+            f =>
+              fs.statSync(`${settings.logDirPath}\\${f}`).size <
+              settings.logMaxSize
+          );
+        const d = new Date();
+        let filepath = '';
+        if (existingLog) {
+          filepath = `${settings.logDirPath}\\${existingLog}`;
+        } else {
+          filepath =
+            `${settings.logDirPath}\\${settings.logPrefix}_` +
+            `${d.getFullYear()}-` +
+            `${d.getMonth()}-` +
+            `${d.getDate()}-` +
+            `${d.getTime()}.log`;
+        }
+        const msg = `${d}\n${payload.join('\n')}\n\n`;
+        fs.appendFile(filepath, msg, 'utf8', aErr => {
+          if (aErr) {
+            reject('');
+          } else {
+            resolve(msg);
+          }
+        });
+      }
+    });
   });
 };
 
@@ -120,7 +144,7 @@ export const lp = logprint;
 const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     print(getTagForPrint(tag), ...payload);
-    log(getTagAndDateForLog(tag), ...payload)
+    log(getTagForLog(tag), ...payload)
       .then(logValue => {
         resolve(logValue);
       })
@@ -138,14 +162,6 @@ export const setLogDirPath = (value: string): void => {
   }
 };
 
-export const setLogMaxLength = (value: number): void => {
-  try {
-    settings.logMaxLength = Number(value);
-  } catch {
-    return;
-  }
-};
-
 export const setLogMaxSize = (value: number): void => {
   try {
     settings.logMaxSize = Number(value);
@@ -157,6 +173,7 @@ export const setLogMaxSize = (value: number): void => {
 export const setLogPrefix = (value: string): void => {
   try {
     settings.logPrefix = String(value);
+    regExp = new RegExp(`^${settings.logPrefix}_.*log`, 'g');
   } catch {
     return;
   }
@@ -165,14 +182,6 @@ export const setLogPrefix = (value: string): void => {
 export const setPrintDisabled = (value: boolean): void => {
   try {
     settings.printDisabled = Boolean(value);
-  } catch {
-    return;
-  }
-};
-
-export const setPrintMaxLength = (value: number): void => {
-  try {
-    settings.printMaxLength = Number(value);
   } catch {
     return;
   }
@@ -188,8 +197,8 @@ export const setPrintTagColor = (value: string): void => {
 
 export const logscribe = (tag: string, color?: string): IlogScribe => {
   return {
-    l: (...payload: any) => log(getTagAndDateForLog(tag), ...payload),
-    log: (...payload: any) => log(getTagAndDateForLog(tag), ...payload),
+    l: (...payload: any) => log(getTagForLog(tag), ...payload),
+    log: (...payload: any) => log(getTagForLog(tag), ...payload),
     logprint: (...payload: any) => logprintWithTag(tag, ...payload),
     lp: (...payload: any) => logprintWithTag(tag, ...payload),
     p: (...payload: any) => print(getTagForPrint(tag, color), ...payload),

@@ -12,9 +12,9 @@ const { log, logprint, print } = require('./dist/index');
  * fn_setGlobalLogOptions: 0.134ms
  * 
  * v.1.1.0
- * log(): 0.251ms
- * logprint(): 1.320ms
- * print(): 0.317ms
+ * log(): 0.696ms
+ * logprint(): 1.349ms
+ * print(): 0.209ms
  */
 
 console.log('\n');
