@@ -46,7 +46,7 @@ export const getTagForPrint = (tag: string, color?: string): string => {
   try {
     return `${color || settings.printTagColor}${tag}\x1b[0m -`;
   } catch {
-    return '';
+    return ' -';
   }
 };
 
@@ -64,9 +64,9 @@ export const getDateForPrint = (): string => {
 
 export const getTagForLog = (tag?: string): string => {
   try {
-    return typeof tag === 'string' && tag !== '' ? `[${tag}]` : '';
+    return typeof tag === 'string' && tag !== '' ? `[${tag}]` : '[]';
   } catch {
-    return '';
+    return '[]';
   }
 };
 
