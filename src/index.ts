@@ -42,23 +42,18 @@ const settings: Isettings = {
 let regExp = new RegExp(`^${settings.logPrefix}_.*log`, 'g');
 
 // LogScribe utility methods --------------------------------------------------
+
+/**
+ * Returns a tag that is suitable for printting.
+ * @param {string} tag - Tag to be printed.
+ * @param {color} color - Color of the tag text.
+ * @returns {string} - A formatted tag.
+ */
 export const getTagForPrint = (tag: string, color?: string): string => {
   try {
     return `${color || settings.printTagColor}${tag}\x1b[0m -`;
   } catch {
     return ' -';
-  }
-};
-
-export const getDateForPrint = (): string => {
-  try {
-    const d = new Date();
-    const h = ('0' + d.getHours()).slice(-2);
-    const m = ('0' + d.getMinutes()).slice(-2);
-    const s = ('0' + d.getSeconds()).slice(-2);
-    return `${h}:${m}:${s}`;
-  } catch {
-    return '';
   }
 };
 
@@ -114,7 +109,13 @@ export const l = log;
 
 export const print = (...payload: any): void => {
   try {
-    console.log(getDateForPrint(), ...payload);
+    const d = new Date();
+    console.log(
+      `${('0' + d.getHours()).slice(-2)}:` +
+        `${('0' + d.getMinutes()).slice(-2)}:` +
+        `${('0' + d.getSeconds()).slice(-2)}`,
+      ...payload
+    );
   } catch {
     return;
   }
