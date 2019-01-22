@@ -2,9 +2,9 @@
 
 # <a href='https://github.com/ahoys/logscribe'><img src='https://raw.githubusercontent.com/ahoys/logscribe/master/assets/logscribe_192.png' height='192' alt='LogScribe Logo' /></a>
 
-How can a log be a scribe, you might wonder.
+How can a log be a scribe, you might wonder?
 
-Well, by being super fast, simplistic and yet lightweight! That's how and here it is.
+Well, keep on reading and you'll realize that logs are natural loggers!
 
 ### What it does?
 LogScribe aims to be as straigtforward, fast and robust log-to-file utility as possible. Log files are automatically splitted if they get too big and each log-message will automatically have a date attached to it. You can even add tags and colors to your messages. Check out the quick examples below!
