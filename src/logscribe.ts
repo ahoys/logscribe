@@ -52,9 +52,9 @@ export const getTagForPrint = (tag: string, color?: string): string => {
   }
 };
 
-export const getDateForPrint = (date?: Date): string => {
+export const getDateForPrint = (): string => {
   try {
-    const d = date || new Date();
+    const d = new Date();
     const h = ('0' + d.getHours()).slice(-2);
     const m = ('0' + d.getMinutes()).slice(-2);
     const s = ('0' + d.getSeconds()).slice(-2);
@@ -64,9 +64,9 @@ export const getDateForPrint = (date?: Date): string => {
   }
 };
 
-export const getTagAndDateForLog = (tag?: string, date?: Date): string => {
+export const getTagAndDateForLog = (tag?: string): string => {
   try {
-    const d = date || new Date();
+    const d = new Date();
     const h = ('0' + d.getHours()).slice(-2);
     const m = ('0' + d.getMinutes()).slice(-2);
     const s = ('0' + d.getSeconds()).slice(-2);
@@ -102,9 +102,8 @@ export const p = print;
 export const logprint = (...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     // Print ASAP, let log take its time.
-    const d = new Date();
     print(...payload);
-    log(...payload, d)
+    log(...payload)
       .then(logValue => {
         resolve(logValue);
       })
@@ -120,9 +119,8 @@ export const lp = logprint;
 // LogScribe private methods --------------------------------------------------
 const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const d = new Date();
     print(getTagForPrint(tag), ...payload);
-    log(getTagAndDateForLog(tag, d), ...payload)
+    log(getTagAndDateForLog(tag), ...payload)
       .then(logValue => {
         resolve(logValue);
       })
