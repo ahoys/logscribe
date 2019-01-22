@@ -241,19 +241,6 @@ export const setPrintDisabled = (value: boolean): void => {
 };
 
 /**
- * Sets a color for tags. Consoles must understand the format.
- * E.g. "\x1b[36m"
- * @param {string} value - A new value to be saved.
- */
-export const setPrintTagColor = (value: string): void => {
-  try {
-    settings.printTagColor = String(value);
-  } catch {
-    return;
-  }
-};
-
-/**
  * Returns everything this module has to provide but with a
  * global tag attached.
  * @param tag - A tag to be logged.
