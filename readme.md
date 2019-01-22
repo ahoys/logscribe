@@ -11,24 +11,24 @@ LogScribe aims to be as straigtforward, fast and robust log-to-file utility as p
 
 `log('Hello World!');`
 
-I just logged "Hello World" into a log file called application-2019_01_22.log:
+I just logged "Hello World!" into a log file called application-2019_01_22.log:
 ```
 Tue Jan 22 2019 20:16:43 GMT+0200 (Eastern European Standard Time)
 Hello World!
 ```
 `print('Hello World!');`
 
-Now I printed out "Hello World" to a console:
+Now I printed out "Hello World!" to a console:
 ```
 [12.20.04] - Hello World!
 ```
 `logprint('Hello World!);`
 
-And now I did both above at the same time!
+And now I did both at the same time!
 
 `l('Hello World!');` `p('Hello World!');` `lp('Hello World!');`
 
-And these are aliases for the functions above if I feel lazy.
+And here are aliases for the functions above if you feel like typing extra letters is slowing you down.
 
 ### Treats
 - No other dependencies!
@@ -64,7 +64,7 @@ import { log } from 'logscribe';
 log('Hello World');
 log('Hello World', 'This will take a new line', '3rd line');
 ```
-Even though log accepts anything, you should mainly use strings, numbers, lists and booleans as some other values may not be very useful when logged. For example objects end up being [Object object].
+Even though log accepts anything, you should mainly use strings, numbers, lists and booleans as some other types may not be very useful when logged. For example objects end up being [Object object].
 
 **Alias:** l()
 
@@ -118,8 +118,11 @@ Let's dive deeper...
 import logscribe from 'logscribe';
 const print = logscribe('General').p;
 const warningPrint = logscribe('WARNING', '\x1b[31m').p; // "\x1b[31m" is red.
-print('Everything is cool!');
-warningPrint('Oh no, an error!');
+try {
+  print('Everything is cool!');
+} catch(e) {
+  warningPrint('Oh no, an error!', e);
+}
 ```
 ## Settings
 
