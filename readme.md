@@ -7,44 +7,43 @@ How can a log be a scribe, you might wonder.
 Well, by being super fast, simplistic and yet lightweight! That's how and here it is.
 
 ### What it does?
-LogScribe is a yet another log-to-file utility library. It allows you to asynchronously write log and at the same time print console messages with a one, very short, command. LogScribe automatically splits the log files as they get too large.
+LogScribe aims to be as straigtforward, fast and robust log-to-file utility as possible. Log files are automatically splitted if they get too big and each log-message will automatically have a date attached to it. You can even add tags and colors to your messages. Check out the quick examples below!
 
-`log('Hello World');`
-I just logged "Hello World" into a log file and printed it to my console.
+`log('Hello World!');`
 
-`log('Hello World', 'Super Secret Function');`
-And just like that I attached a tag to it.
-
-`print('No need to log this!');`
-Not everything has to be logged.
-
+I just logged "Hello World" into a log file called application-2019_01_22.log:
 ```
-Sat Jan 19 2019 09:44:26 GMT+0200 (Eastern European Standard Time)
-Hello World
-
-[Super Secret Function]
-Sat Jan 19 2019 09:44:27 GMT+0200 (Eastern European Standard Time)
-Hello World
+Tue Jan 22 2019 20:16:43 GMT+0200 (Eastern European Standard Time)
+Hello World!
 ```
-And this is how my `application_2019_01_19.log` now looks like.
+`print('Hello World!');`
+
+Now I printed out "Hello World" to a console:
+```
+[12.20.04] - Hello World!
+```
+`logprint('Hello World!);`
+
+And now I did both above at the same time!
+
+`l('Hello World!');` `p('Hello World!');` `lp('Hello World!');`
+
+And these are aliases for the functions above if I feel lazy.
 
 ### Treats
-- No external libraries!
-- Written in TypeScript.
-- Asynchronous (can be used synchronously too).
-- Automatic log file splitting.
-- Custom log folders.
-- Custom log prefixes.
-- Console colors.
-- Timestamps and tags.
-- Log-specific options.
+- No other dependencies!
+- Written in TypeScript
+- Automatic log file splitting
+- Custom log folders
+- Custom log prefixes
+- Automatic timestamps
+- Tags
+- Tag colors
 
 ### Specs
-- log(): 0.936ms
-- logSync(): 3.126ms
-- print(): 0.524ms
-- getGlobalLogOptions(): 0.052ms
-- setGlobalLogOptions(): 0.134ms
+- log(): 0.696ms
+- print(): 0.209ms
+- logprint(): 1.349ms
 
 ## Install
 
@@ -56,75 +55,92 @@ Yarn
 
 `yarn add logscribe`
 
-## Usage
+## Basic Usage
 
-### log()
-Logs a message into a log file.
+### log(any)
+Logs messages into a log file.
 ```
-import log from 'logscribe';
+import { log } from 'logscribe';
 log('Hello World');
-log('Hello World', 'Example Tag');
-log('Hello World', 'Example Tag', false);
-log('Hello World', 'Example Tag', false, { filePrefix: 'myFile' });
+log('Hello World', 'This will take a new line', '3rd line');
 ```
-Parameters:
-1. **@param message {any}** - A message to be logged.
-2. **@param tag {string}** - A tag for the message **(optional)**.
-3. **@param doPrint {boolean}** - Whether to console print out the message (console.log) **(optional)**.
-4. **@param options {object}** - Various options for overriding global log options **(optional)**.
+Even though log accepts anything, you should mainly use strings, numbers, lists and booleans as some other values may not be very useful when logged. For example objects end up being [Object object].
 
-### logSync()
-Basically exactly the same as the log(), but synchronous. If it is **crucial** to log the events in a correct order, use logSync(). When saving log asynchronously (log()), two almost simultaneously triggered logs may not finish in the same order as they started. LogSync() is about 3x slower than log(), though still fast.
+**Alias:** l()
 
-### print()
-Prints a message to a console.
+### print(any)
+Prints messages to a console.
 ```
 import { print } from 'logscribe';
 print('Hello World');
-print('Hello World', 'Example Tag');
-print('Hello World', 'Example Tag', { filePrefix: 'myFile' });
-print('Hello World', 'Example Tag', { filePrefix: 'myFile' }, new Date());
+print('Hello World', 'This will take a new line', '3rd line');
 ```
-Parameters:
-1. **@param message {any}** - A message to be logged.
-2. **@param tag {string}** - A tag for the message **(optional)**.
-3. **@param options {object}** - Various options for overriding global log options **(optional)**.
-4. **@param date {Date}** - If you want to display some different Date **(optional)**.
+Unlike in log(), with print() you can also print out objects. You can disable printing with `setPrintDisabled(boolean)`.
 
-### getGlobalLogOptions()
-Returns the currently active global log options.
+**Alias:** p()
+
+### logprint(any)
+Combines log() and print().
 ```
-import { getGlobalLogOptions } from 'logscribe';
-getGlobalLogOptions();
+import { logprint } from 'logscribe';
+logprint('Hello World');
+logprint('Hello World', 'This will take a new line', '3rd line');
 ```
-1. **@returns {object}** - The current global settings.
+**Alias:** lp()
 
-### setDirPath(value: string)
-Set path for the log files. The path must exist and the application must have writing permissions to the path. Note that this is a directory path, not a full filepath. See `setFilePrefix()` for more.
+## Advanced Usage
 
-`Default: <project root>`
+### Logging, printing and logprinting with tags
+To execute basic functionality with a tag or a custom color you need to initialize the log(), print() or logprint() functions with a `logscribe(tag: string, color?: string)` wrapper. With this wrapper you can define what tags or colors are being used. You can also create multiple wrappers for different needs!
+```
+import logscribe from 'logscribe';
+const ls = logscribe('myTag');
+// We now have a wrapper function "ls" that includes the basic functionality with tags enabled!
+// The following examples will have a "myTag" attached.
+ls.log('Hello World!')
+ls.print('Hello World!);
+ls.logprint('Hello World!);
+```
+You can also minify the above:
+```
+import logscribe from 'logscribe';
+const lp = logscribe('myTag').lp;
+lp('And here we go!');
+```
+Here we add a tag and a custom color!
+```
+import logscribe from 'logscribe';
+const p = logscribe('myTag', '\x1b[32m').lp;
+p('myTag now has a cool custom color.');
+```
+Let's dive deeper...
+```
+import logscribe from 'logscribe';
+const print = logscribe('General').p;
+const warningPrint = logscribe('WARNING', '\x1b[31m').p; // "\x1b[31m" is red.
+print('Everything is cool!');
+warningPrint('Oh no, an error!');
+```
+## Settings
 
-### setDisabledTags(value: string[])
-Messages that have these tags won't be logged or printed. If `"*"` is added then nothing will be saved/displayed.
+These are global settings for LogScribe. Set them as your project initializes.
 
-`Default: []`
+### setLogDirPath(string)
+Sets a directory path for the log files. The application must have a writing permission to the path and the path must exist.
 
-### setFilePrefix(value: string)
-Prefix for the log file. For example `"custom"` would mean `custom_2019_01_20.log` -files.
+`Default: <app root>`
+
+### setLogMaxSize(number)
+Maximum filesize of a log before a new log file is created. Value is in bytes (1000 = 1KB).
+
+`Default: 1024000`
+
+### setLogPrefix(string)
+Prefix for the log file. For example a value "custom" would end up being: `custom_2019-22-01.log`.
 
 `Default: "application"`
 
-### setMaxMsgLength(value: number)
-Maxmimum length (chars) of a message. If a message is longer than this value, the message will be cut.
+### setPrintDisabled(boolean)
+Whether to disable p(), print() and partially logprint() or lp(). Logging will stay active. Useful in situations where you'd like to disable printing, like for example in production environments: `setPrintDisabled(process.env.NODE_ENV === 'production');`.
 
-`Default: 8192`
-
-### setPrintColor(value: string)
-Tag and time coloring. This is useful to mark something more crucial by coloring it to something else. Note that this affects only the console, not logging.
-
-`Default: "\x1b[32m" (green)`
-
-### setPrintConsole(value: boolean)
-Whether to print out what is logged. Note that disabling this won't disable print().
-
-`Default: true`
+`Default: false`
