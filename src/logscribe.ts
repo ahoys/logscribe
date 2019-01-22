@@ -132,14 +132,6 @@ const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
   });
 };
 
-export const printWithNoTag = (...payload: any): void => {
-  try {
-    console.log(...payload);
-  } catch {
-    return;
-  }
-};
-
 export const setLogDirPath = (value: string): void => {
   try {
     settings.logDirPath = String(value);
