@@ -256,3 +256,5 @@ export const logscribe = (tag: string, color?: string): IlogScribe => {
     print: (...payload: any) => print(getTagForPrint(tag, color), ...payload),
   };
 };
+
+export default logscribe;
