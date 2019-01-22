@@ -9,7 +9,7 @@ const src = path.resolve(__dirname, './src')
 module.exports = {
   mode: 'production',
   target: 'node',
-  entry: `${src}/logscribe.ts`,
+  entry: `${src}/index.ts`,
   output: {
     path: dist,
     filename: 'index.js',
