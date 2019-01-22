@@ -31,6 +31,9 @@ export interface Isettings {
 }
 
 // Settings -------------------------------------------------------------------
+
+// These are the so called global settings.
+// User can modify these on file-basis.
 const settings: Isettings = {
   logDirPath: appDir,
   logMaxSize: 1024000,
@@ -39,13 +42,14 @@ const settings: Isettings = {
   printTagColor: '\x1b[36m',
 };
 
+// Used to search for existing log files.
 let regExp = new RegExp(`^${settings.logPrefix}_.*log`, 'g');
 
 // LogScribe utility methods --------------------------------------------------
 
 /**
  * Returns a tag that is suitable for printting.
- * @param {string} tag - Tag to be printed.
+ * @param {string} tag - A tag to be printed.
  * @param {color} color - Color of the tag text.
  * @returns {string} - A formatted tag.
  */
@@ -57,6 +61,11 @@ export const getTagForPrint = (tag: string, color?: string): string => {
   }
 };
 
+/**
+ * Returns a tag that is suitable for logging.
+ * @param {string} tag - A tag to be logged.
+ * @returns {string} - A formatted tag.
+ */
 export const getTagForLog = (tag?: string): string => {
   try {
     return typeof tag === 'string' && tag !== '' ? `[${tag}]` : '[]';
@@ -66,6 +75,12 @@ export const getTagForLog = (tag?: string): string => {
 };
 
 // LogScribe public methods ---------------------------------------------------
+
+/**
+ * Logs text to a log file.
+ * @param payload - A message to log.
+ * @returns {Promise<string>} - A message that was saved.
+ */
 export const log = (...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     fs.readdir(settings.logDirPath, (err, items) => {
@@ -107,6 +122,10 @@ export const log = (...payload: any): Promise<string> => {
 // Alias to log().
 export const l = log;
 
+/**
+ * Prints text to console.
+ * @param payload - A message to print.
+ */
 export const print = (...payload: any): void => {
   try {
     const d = new Date();
@@ -124,6 +143,12 @@ export const print = (...payload: any): void => {
 // Alias to print().
 export const p = print;
 
+/**
+ * Logs and prints a message.
+ * A combination of log() and print().
+ * @param payload - A message to print and log.
+ * @returns {Promise<string>} - A message that was saved.
+ */
 export const logprint = (...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     // Print ASAP, let log take its time.
@@ -142,6 +167,13 @@ export const logprint = (...payload: any): Promise<string> => {
 export const lp = logprint;
 
 // LogScribe private methods --------------------------------------------------
+
+/**
+ * Used to enable logprint with a tag.
+ * @param tag - A tag to be printed.
+ * @param payload - A message to print and log.
+ * @returns {Promise<string>} - A message that was saved.
+ */
 const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
   return new Promise((resolve, reject) => {
     print(getTagForPrint(tag), ...payload);
@@ -155,6 +187,10 @@ const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
   });
 };
 
+/**
+ * Sets default directory path for the log files.
+ * @param {string} value - A new value to be saved.
+ */
 export const setLogDirPath = (value: string): void => {
   try {
     settings.logDirPath = String(value);
@@ -163,6 +199,10 @@ export const setLogDirPath = (value: string): void => {
   }
 };
 
+/**
+ * Sets maximum size for the log files (1000 = 1KB).
+ * @param {string} value - A new value to be saved.
+ */
 export const setLogMaxSize = (value: number): void => {
   try {
     settings.logMaxSize = Number(value);
@@ -171,6 +211,10 @@ export const setLogMaxSize = (value: number): void => {
   }
 };
 
+/**
+ * Sets prefix for the log files (e.g. application_).
+ * @param {string} value - A new value to be saved.
+ */
 export const setLogPrefix = (value: string): void => {
   try {
     settings.logPrefix = String(value);
@@ -180,6 +224,10 @@ export const setLogPrefix = (value: string): void => {
   }
 };
 
+/**
+ * Disables printing.
+ * @param {string} value - A new value to be saved.
+ */
 export const setPrintDisabled = (value: boolean): void => {
   try {
     settings.printDisabled = Boolean(value);
@@ -188,6 +236,11 @@ export const setPrintDisabled = (value: boolean): void => {
   }
 };
 
+/**
+ * Sets a color for tags. Consoles must understand the format.
+ * E.g. "\x1b[36m"
+ * @param {string} value - A new value to be saved.
+ */
 export const setPrintTagColor = (value: string): void => {
   try {
     settings.printTagColor = String(value);
@@ -196,6 +249,12 @@ export const setPrintTagColor = (value: string): void => {
   }
 };
 
+/**
+ * Returns everything this module has to provide but with a
+ * global tag attached.
+ * @param tag - A tag to be logged.
+ * @param color A tag color to be used, e.g. "\x1b[36m".
+ */
 export const logscribe = (tag: string, color?: string): IlogScribe => {
   return {
     l: (...payload: any) => log(getTagForLog(tag), ...payload),
