@@ -38,7 +38,7 @@ const settings: Isettings = {
   logDirPath: appDir,
   logMaxSize: 1024000,
   logPrefix: 'application',
-  printDisabled: process.env.NODE_ENV === 'production',
+  printDisabled: false,
   printTagColor: '\x1b[36m',
 };
 
@@ -128,6 +128,10 @@ export const l = log;
  */
 export const print = (...payload: any): void => {
   try {
+    if (settings.printDisabled) {
+      // If printing is disabled, don't print.
+      return;
+    }
     const d = new Date();
     console.log(
       `${('0' + d.getHours()).slice(-2)}:` +
