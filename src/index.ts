@@ -154,9 +154,9 @@ export const p = print;
  * @returns {Promise<string>} - A message that was saved.
  */
 export const logprint = (...payload: any): Promise<string> => {
+  print(...payload);
   return new Promise((resolve, reject) => {
     // Print ASAP, let log take its time.
-    print(...payload);
     log(...payload)
       .then(logValue => {
         resolve(logValue);
@@ -179,8 +179,8 @@ export const lp = logprint;
  * @returns {Promise<string>} - A message that was saved.
  */
 const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
+  print(getTagForPrint(tag), ...payload);
   return new Promise((resolve, reject) => {
-    print(getTagForPrint(tag), ...payload);
     log(getTagForLog(tag), ...payload)
       .then(logValue => {
         resolve(logValue);
