@@ -1,6 +1,6 @@
 const { log, logprint, print } = require('./dist/index');
 
-// Note that results vary depending on whether the
+// Note that results may vary depending on whether the
 // application.log file already exists.
 
 /**
@@ -11,7 +11,7 @@ const { log, logprint, print } = require('./dist/index');
  * fn_getGlobalLogOptions: 0.052ms
  * fn_setGlobalLogOptions: 0.134ms
  * 
- * v.1.1.0
+ * v.2.0.0
  * log(): 0.696ms
  * logprint(): 1.349ms
  * print(): 0.209ms
@@ -30,34 +30,3 @@ console.timeEnd('logprint');
 console.time('print');
 print('Hello World!');
 console.timeEnd('print');
-
-// // log
-// console.time('fnc_log');
-// f.log('msg', 'log', false);
-// console.timeEnd('fnc_log');
-
-// // logSync
-// console.time('fnc_logSync');
-// f.logSync('msg', 'logSync', false);
-// console.timeEnd('fnc_logSync');
-
-// // print
-// console.time('fnc_print');
-// f.print('msg', 'print');
-// console.timeEnd('fnc_print');
-
-// // getGlobalLogOptions
-// console.time('fnc_getGlobalLogOptions');
-// f.getGlobalLogOptions();
-// console.timeEnd('fnc_getGlobalLogOptions');
-
-// // setGlobalLogOptions
-// console.time('fnc_setGlobalLogOptions');
-// f.setGlobalLogOptions({
-//   dirPath: './',
-//   disabledTags: ['d-tag'],
-//   filePrefix: 'custom',
-//   maxMsgLength: 1024,
-//   printConsole: false,
-// });
-// console.timeEnd('fnc_setGlobalLogOptions');
