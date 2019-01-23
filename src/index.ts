@@ -12,12 +12,17 @@ const appDir = isTesting
   ? path.resolve(__dirname)
   : path.dirname(require && require.main ? require.main.filename : '');
 
+// Here we will store ids of async Promises so that the logging will happen in order.
+// Prioritize the user's application 1st!
+let buffer: string[] = [];
+let dateBuffer: Date[] = [];
+
 // Interfaces -----------------------------------------------------------------
 export interface IlogScribe {
-  l: (...payload: any) => Promise<string>;
-  log: (...payload: any) => Promise<string>;
-  logprint: (...payload: any) => Promise<string>;
-  lp: (...payload: any) => Promise<string>;
+  l: (...payload: any) => void;
+  log: (...payload: any) => void;
+  logprint: (...payload: any) => void;
+  lp: (...payload: any) => void;
   p: (...payload: any) => void;
   print: (...payload: any) => void;
 }
@@ -74,6 +79,90 @@ export const getTagForLog = (tag?: string): string => {
   }
 };
 
+const writeBufferToLog = (
+  files: string[],
+  index: number,
+  existingPath?: string
+): void => {
+  try {
+    // We can't combine finding with executeBuffer() at it may be that the
+    // previous entry in buffer was humongous and the size is now fulfilled.
+    let filepath = '';
+    if (existingPath) {
+      // We already have a suitable filepath.
+      filepath = existingPath;
+    } else if (index === 0) {
+      // This is the first run, we are required to search for
+      // existing log files.
+      const existingLog = files.find(
+        f =>
+          fs.statSync(`${settings.logDirPath}\\${f}`).size < settings.logMaxSize
+      );
+      filepath = existingLog
+        ? `${settings.logDirPath}\\${existingLog}`
+        : `${settings.logDirPath}\\${settings.logPrefix}_` +
+          `${dateBuffer[index].getFullYear()}-` +
+          `${dateBuffer[index].getMonth()}-` +
+          `${dateBuffer[index].getDate()}-` +
+          `${dateBuffer[index].getTime()}.log`;
+    } else {
+      filepath =
+        `${settings.logDirPath}\\${settings.logPrefix}_` +
+        `${dateBuffer[index].getFullYear()}-` +
+        `${dateBuffer[index].getMonth()}-` +
+        `${dateBuffer[index].getDate()}-` +
+        `${dateBuffer[index].getTime()}.log`;
+    }
+    fs.appendFile(filepath, buffer[index], 'utf8', aErr => {
+      if (aErr) {
+        // Something went wrong, clear the buffer to start fresh
+        // next time.
+        buffer = [];
+        dateBuffer = [];
+      } else if (buffer[index + 1]) {
+        // We measure the file size after the addition
+        // to determine whether this same file can be re-used
+        // for the next buffer entry. This should save us some cycles.
+        fs.stat(filepath, (err, stat) => {
+          if (err) {
+            buffer = [];
+            dateBuffer = [];
+          } else if (stat.size < settings.logMaxSize) {
+            // We skip executeBuffer to save performance.
+            // In theory some of the files may have gotten deleted,
+            // but that should be super rare as the buffer clears so fast and
+            // no-one else should be removing our log files after all.
+            writeBufferToLog(files, index + 1, filepath);
+          } else {
+            writeBufferToLog(files, index + 1);
+          }
+        });
+      } else {
+        // Buffer is executed, clear it.
+        buffer = [];
+        dateBuffer = [];
+      }
+    });
+    return;
+  } catch {
+    return;
+  }
+};
+
+const executeBuffer = (index: number): void => {
+  fs.readdir(settings.logDirPath, (err, items) => {
+    if (err) {
+      // Something went wrong, clear the buffer to start fresh
+      // next time.
+      buffer = [];
+      dateBuffer = [];
+    } else {
+      // Write log based on the buffer.
+      writeBufferToLog(items.filter(f => f.match(regExp)), index);
+    }
+  });
+};
+
 // LogScribe public methods ---------------------------------------------------
 
 /**
@@ -81,42 +170,23 @@ export const getTagForLog = (tag?: string): string => {
  * @param payload - A message to log.
  * @returns {Promise<string>} - A message that was saved.
  */
-export const log = (...payload: any): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    fs.readdir(settings.logDirPath, (err, items) => {
-      if (err) {
-        reject('');
-      } else {
-        const existingLog = items
-          .filter(f => f.match(regExp))
-          .find(
-            f =>
-              fs.statSync(`${settings.logDirPath}\\${f}`).size <
-              settings.logMaxSize
-          );
-        const d = new Date();
-        let filepath = '';
-        if (existingLog) {
-          filepath = `${settings.logDirPath}\\${existingLog}`;
-        } else {
-          filepath =
-            `${settings.logDirPath}\\${settings.logPrefix}_` +
-            `${d.getFullYear()}-` +
-            `${d.getMonth()}-` +
-            `${d.getDate()}-` +
-            `${d.getTime()}.log`;
-        }
-        const msg = `${d}\n${payload.join('\n')}\n\n`;
-        fs.appendFile(filepath, msg, 'utf8', aErr => {
-          if (aErr) {
-            reject('');
-          } else {
-            resolve(msg);
-          }
-        });
-      }
-    });
-  });
+export const log = (...payload: any): void => {
+  try {
+    let m = '';
+    // Combine the message. Remember, join() would be heavy.
+    payload.forEach((v: any) => (m += `${v}\n`));
+    if (!buffer[0]) {
+      dateBuffer.push(new Date());
+      buffer.push(`${dateBuffer[0]}\n${m}\n`);
+      executeBuffer(0);
+    } else {
+      const d = new Date();
+      dateBuffer.push(d);
+      buffer.push(`${d}\n${m}\n`);
+    }
+  } catch {
+    return;
+  }
 };
 
 // Alias to log().
@@ -151,20 +221,14 @@ export const p = print;
  * Logs and prints a message.
  * A combination of log() and print().
  * @param payload - A message to print and log.
- * @returns {Promise<string>} - A message that was saved.
  */
-export const logprint = (...payload: any): Promise<string> => {
-  print(...payload);
-  return new Promise((resolve, reject) => {
-    // Print ASAP, let log take its time.
-    log(...payload)
-      .then(logValue => {
-        resolve(logValue);
-      })
-      .catch(() => {
-        reject('');
-      });
-  });
+export const logprint = (...payload: any): void => {
+  try {
+    print(...payload);
+    log(...payload);
+  } catch {
+    return;
+  }
 };
 
 // Alias to logprint();
@@ -176,19 +240,14 @@ export const lp = logprint;
  * Used to enable logprint with a tag.
  * @param tag - A tag to be printed.
  * @param payload - A message to print and log.
- * @returns {Promise<string>} - A message that was saved.
  */
-const logprintWithTag = (tag: string, ...payload: any): Promise<string> => {
-  print(getTagForPrint(tag), ...payload);
-  return new Promise((resolve, reject) => {
-    log(getTagForLog(tag), ...payload)
-      .then(logValue => {
-        resolve(logValue);
-      })
-      .catch(() => {
-        reject('');
-      });
-  });
+const logprintWithTag = (tag: string, ...payload: any): void => {
+  try {
+    print(getTagForPrint(tag), ...payload);
+    log(getTagForLog(tag), ...payload);
+  } catch {
+    return;
+  }
 };
 
 /**

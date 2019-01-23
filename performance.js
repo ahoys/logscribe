@@ -19,13 +19,18 @@ const { log, logprint, print } = require('./dist/index');
 
 console.log('\n');
 
+// NOTE: running log and logprint at the same time will skew the results
+// because of inner optimizations. The second log run is always faster.
+
+// 1.873ms
 console.time('log');
 log('Hello World!');
 console.timeEnd('log');
 
-console.time('logprint');
-logprint('Hello World!');
-console.timeEnd('logprint');
+// 2.433ms
+// console.time('logprint');
+// logprint('Hello World!');
+// console.timeEnd('logprint');
 
 console.time('print');
 print('Hello World!');
