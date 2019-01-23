@@ -1,5 +1,3 @@
-# LogScribe
-
 # <a href='https://github.com/ahoys/logscribe'><img src='https://raw.githubusercontent.com/ahoys/logscribe/master/assets/logscribe_192.png' height='192' alt='LogScribe Logo' /></a>
 
 How can a log be a scribe, you might wonder?
