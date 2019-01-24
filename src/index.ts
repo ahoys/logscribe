@@ -79,6 +79,10 @@ export const getTagForLog = (tag?: string): string => {
   }
 };
 
+/**
+ * Does the actual log writing.
+ * Writes everything in buffer to log files and then clears the buffer.
+ */
 const writeBufferToLog = (
   files: string[],
   index: number,
@@ -91,20 +95,6 @@ const writeBufferToLog = (
     if (existingPath) {
       // We already have a suitable filepath.
       filepath = existingPath;
-    } else if (index === 0) {
-      // This is the first run, we are required to search for
-      // existing log files.
-      const existingLog = files.find(
-        f =>
-          fs.statSync(`${settings.logDirPath}\\${f}`).size < settings.logMaxSize
-      );
-      filepath = existingLog
-        ? `${settings.logDirPath}\\${existingLog}`
-        : `${settings.logDirPath}\\${settings.logPrefix}_` +
-          `${dateBuffer[index].getFullYear()}-` +
-          `${dateBuffer[index].getMonth()}-` +
-          `${dateBuffer[index].getDate()}-` +
-          `${dateBuffer[index].getTime()}.log`;
     } else {
       filepath =
         `${settings.logDirPath}\\${settings.logPrefix}_` +
@@ -149,16 +139,54 @@ const writeBufferToLog = (
   }
 };
 
-const executeBuffer = (index: number): void => {
+/**
+ * Starts to executing the buffer.
+ * Buffer contains all the log messages that need to be logged.
+ *
+ * We shall gather all suitable log files here before we start,
+ * this way we don't have to sacrifice performance on finding
+ * files on each buffer index.
+ */
+const executeBuffer = (): void => {
   fs.readdir(settings.logDirPath, (err, items) => {
     if (err) {
       // Something went wrong, clear the buffer to start fresh
       // next time.
       buffer = [];
       dateBuffer = [];
+    } else if (items[0]) {
+      const files = items.filter(f => regExp.test(f));
+      if (files[0]) {
+        const findStat = (i: number) => {
+          fs.stat(files[i], (errStat, stat) => {
+            if (errStat) {
+              console.log('wrong');
+              // Something went wrong.
+              buffer = [];
+              dateBuffer = [];
+            } else if (stat.size < settings.logMaxSize) {
+              console.log('suitable');
+              // Bling! A suitable file was found.
+              writeBufferToLog(files, 0, files[i]);
+            } else if (files[i + 1]) {
+              console.log('moar');
+              // Read more stats.
+              findStat(i + 1);
+            } else {
+              console.log('new path');
+              // A new path must be created.
+              writeBufferToLog(files, 0);
+            }
+          });
+        };
+        findStat(0);
+      } else {
+        // No existing log files.
+        writeBufferToLog([], 0);
+      }
     } else {
-      // Write log based on the buffer.
-      writeBufferToLog(items.filter(f => f.match(regExp)), index);
+      // Empty dir.
+      writeBufferToLog([], 0);
     }
   });
 };
@@ -178,7 +206,7 @@ export const log = (...payload: any): void => {
     if (!buffer[0]) {
       dateBuffer.push(new Date());
       buffer.push(`${dateBuffer[0]}\n${m}\n`);
-      executeBuffer(0);
+      executeBuffer();
     } else {
       const d = new Date();
       dateBuffer.push(d);
