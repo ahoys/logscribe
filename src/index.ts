@@ -160,20 +160,16 @@ const executeBuffer = (): void => {
         const findStat = (i: number) => {
           fs.stat(files[i], (errStat, stat) => {
             if (errStat) {
-              console.log('wrong');
               // Something went wrong.
               buffer = [];
               dateBuffer = [];
             } else if (stat.size < settings.logMaxSize) {
-              console.log('suitable');
               // Bling! A suitable file was found.
               writeBufferToLog(files, 0, files[i]);
             } else if (files[i + 1]) {
-              console.log('moar');
               // Read more stats.
               findStat(i + 1);
             } else {
-              console.log('new path');
               // A new path must be created.
               writeBufferToLog(files, 0);
             }

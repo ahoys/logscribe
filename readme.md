@@ -29,19 +29,20 @@ And now I did both at the same time!
 And here are aliases for the functions above if you feel like typing extra letters is slowing you down.
 
 ### Treats
-- No other dependencies!
+- Fully asynchronous
+- No other dependencies
 - Written in TypeScript
 - Automatic log file splitting
+- Automatic timestamps on everything
+- Message tags
 - Custom log folders
 - Custom log prefixes
-- Automatic timestamps
-- Tags
 - Tag colors
 
 ### Specs
-- log(): 0.696ms
-- print(): 0.209ms
-- logprint(): 1.349ms
+- log(): 1.675ms
+- print(): 3.609ms
+- logprint(): 4.892ms
 
 ## Install
 

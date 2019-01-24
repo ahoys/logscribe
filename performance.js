@@ -1,37 +1,22 @@
 const { log, logprint, print } = require('./dist/index');
 
-// Note that results may vary depending on whether the
-// application.log file already exists.
+// Rules: application_*.log must exist, so run log at least once before
+// measuring. Most of the time in real-world the application's log is
+// already created.
+// Run one test at a time. Multiple runs at a time cause strange interference
+// that decreases the execution time.
 
-/**
- * v.1.0.3
- * fn_log: 0.936ms
- * fn_logSync: 3.126ms
- * fn_print: 0.524ms
- * fn_getGlobalLogOptions: 0.052ms
- * fn_setGlobalLogOptions: 0.134ms
- * 
- * v.2.0.0
- * log(): 0.696ms
- * logprint(): 1.349ms
- * print(): 0.209ms
- */
+// v.2.0.0: 1.675ms
+// console.time('log');
+// log('Hello World!');
+// console.timeEnd('log');
 
-console.log('\n');
-
-// NOTE: running log and logprint at the same time will skew the results
-// because of inner optimizations. The second log run is always faster.
-
-// 1.873ms
-console.time('log');
-log('Hello World!');
-console.timeEnd('log');
-
-// 2.433ms
+// v.2.0.0: 4.892ms
 // console.time('logprint');
 // logprint('Hello World!');
 // console.timeEnd('logprint');
 
-console.time('print');
-print('Hello World!');
-console.timeEnd('print');
+// v.2.0.0: 3.609ms
+// console.time('print');
+// print('Hello World!');
+// console.timeEnd('print');
