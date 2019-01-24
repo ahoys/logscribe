@@ -158,14 +158,15 @@ const executeBuffer = (): void => {
       const files = items.filter(f => regExp.test(f));
       if (files[0]) {
         const findStat = (i: number) => {
-          fs.stat(files[i], (errStat, stat) => {
+          const f = `${settings.logDirPath}\\${files[i]}`;
+          fs.stat(f, (errStat, stat) => {
             if (errStat) {
               // Something went wrong.
               buffer = [];
               dateBuffer = [];
             } else if (stat.size < settings.logMaxSize) {
               // Bling! A suitable file was found.
-              writeBufferToLog(files, 0, files[i]);
+              writeBufferToLog(files, 0, f);
             } else if (files[i + 1]) {
               // Read more stats.
               findStat(i + 1);
