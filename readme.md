@@ -72,7 +72,7 @@ Prints messages to a console.
 ```
 import { print } from 'logscribe';
 print('Hello World');
-print('Hello World', 'This will take a new line', '3rd line');
+print('Hello World', '2nd part');
 ```
 Unlike in log(), with print() you can also print out objects. You can disable printing with `setPrintDisabled(boolean)`.
 
