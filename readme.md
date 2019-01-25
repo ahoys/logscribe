@@ -93,40 +93,37 @@ logprint('Hello World', 'This will take a new line', '3rd line');
 To execute basic functionality with a tag or a custom color you need to initialize the log(), print() or logprint() functions with a `logscribe(tag: string, color?: string)` wrapper. With this wrapper you can define what tags or colors are being used. You can also create multiple wrappers for different needs!
 ```
 import logscribe from 'logscribe';
-const ls = logscribe('myTag');
-// We now have a wrapper function "ls" that includes the basic functionality with tags enabled!
+const { log, print, logprint } = logscribe('myTag');
 // The following examples will have a "myTag" attached.
-ls.log('Hello World!')
-ls.print('Hello World!);
-ls.logprint('Hello World!);
-```
-You can also minify the above:
-```
-import logscribe from 'logscribe';
-const lp = logscribe('myTag').lp;
-lp('And here we go!');
+log('Hello World!')
+print('Hello World!);
+logprint('Hello World!);
 ```
 Here we add a tag and a custom color!
 ```
 import logscribe from 'logscribe';
-const p = logscribe('myTag', '\x1b[32m').lp;
+// Remember, "p" is same as "print".
+const { p } = logscribe('myTag', '\x1b[32m');
 p('myTag now has a cool custom color.');
 ```
 Let's dive deeper...
 ```
 import logscribe from 'logscribe';
-const print = logscribe('General').p;
-const warningPrint = logscribe('WARNING', '\x1b[31m').p; // "\x1b[31m" is red.
+const { print } = logscribe('General');
+// Notice the ".print" part in the following. "\x1b[31m" is red.
+const warningPrint = logscribe('WARNING', '\x1b[31m').print;
 try {
   print('Everything is cool!');
 } catch(e) {
   warningPrint('Oh no, an error!', e);
 }
 ```
-Note that for ES5 the syntax is *slightly* different.
+For ES5 the syntax is *slightly* different.
 ```
-const { logscribe } = require('logscribe');
-const print = logscribe('General').p;
+// Logging without tags.
+const { log } = require('logscribe');
+// Printing with tags.
+const { print } = require('logscribe').default('General');
 ...
 ```
 ## Settings
