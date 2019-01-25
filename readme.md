@@ -56,7 +56,7 @@ Yarn
 
 ## Basic Usage
 
-### log(any)
+### log(...value: any): void
 Logs messages into a log file.
 ```
 import { log } from 'logscribe';
@@ -67,7 +67,7 @@ Even though log accepts anything, you should mainly use strings, numbers, lists 
 
 **Alias:** l()
 
-### print(any)
+### print(...value: any): void
 Prints messages to a console.
 ```
 import { print } from 'logscribe';
@@ -78,7 +78,7 @@ Unlike in log(), with print() you can also print out objects. You can disable pr
 
 **Alias:** p()
 
-### logprint(any)
+### logprint(...value: any): void
 Combines log() and print().
 ```
 import { logprint } from 'logscribe';
@@ -130,22 +130,22 @@ const { print } = require('logscribe').default('General');
 
 These are global settings for LogScribe. Set them as your project initializes.
 
-### setLogDirPath(string)
+### setLogDirPath(value: string): void
 Sets a directory path for the log files. The application must have a writing permission to the path and the path must exist.
 
 `Default: <app root>`
 
-### setLogMaxSize(number)
+### setLogMaxSize(value: number): void
 Maximum filesize of a log before a new log file is created. Value is in bytes (1000 = 1KB).
 
 `Default: 1024000`
 
-### setLogPrefix(string)
+### setLogPrefix(value: string): void
 Prefix for the log file. For example a value "custom" would end up being: `custom_2019-22-01.log`.
 
 `Default: "application"`
 
-### setPrintDisabled(boolean)
+### setPrintDisabled(value: boolean): void
 Whether to disable p(), print() and partially logprint() or lp(). Logging will stay active. Useful in situations where you'd like to disable printing, like for example in production environments: `setPrintDisabled(process.env.NODE_ENV === 'production');`.
 
 `Default: false`
