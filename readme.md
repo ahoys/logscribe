@@ -123,6 +123,12 @@ try {
   warningPrint('Oh no, an error!', e);
 }
 ```
+Note that for ES5 the syntax is *slightly* different.
+```
+const { logscribe } = require('logscribe');
+const print = logscribe('General').p;
+...
+```
 ## Settings
 
 These are global settings for LogScribe. Set them as your project initializes.
