@@ -148,7 +148,7 @@ Disables console printing. Useful in production environments where you may not w
 `Default: false`
 
 # Colors
-Here's a cheatsheet for suitable console colors.
+A cheatsheet for console colors.
 ```
 FgBlack = "\x1b[30m"
 FgRed = "\x1b[31m"
