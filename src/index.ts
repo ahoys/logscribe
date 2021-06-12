@@ -103,7 +103,7 @@ const writeBufferToLog = (
         `${dateBuffer[index].getDate()}-` +
         `${dateBuffer[index].getTime()}.log`;
     }
-    fs.appendFile(filepath, buffer[index], 'utf8', aErr => {
+    fs.appendFile(filepath, buffer[index], 'utf8', (aErr) => {
       if (aErr) {
         // Something went wrong, clear the buffer to start fresh
         // next time.
@@ -155,7 +155,7 @@ const executeBuffer = (): void => {
       buffer = [];
       dateBuffer = [];
     } else if (items[0]) {
-      const files = items.filter(f => regExp.test(f));
+      const files = items.filter((f) => regExp.test(f));
       if (files[0]) {
         const findStat = (i: number) => {
           const f = `${settings.logDirPath}\\${files[i]}`;
