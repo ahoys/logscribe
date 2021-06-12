@@ -1,28 +1,28 @@
 # <a href='https://github.com/ahoys/logscribe'><img src='https://raw.githubusercontent.com/ahoys/logscribe/master/assets/logscribe_192.png' height='192' alt='LogScribe Logo' /></a>
 
-How can a log be a scribe, you might wonder?
+### What and why?
+LogScribe aims to be as straigtforward, fast and robust log-to-file/terminal utility as possible.
 
-Well, keep on reading and you'll realize that logs are natural loggers!
+The log file is automatically split into smaller files and each message will automatically have a timestamp attached. For more advanced usage, you can add tags to your messages and even color them.
 
-### What it does?
-LogScribe aims to be as straigtforward, fast and robust log-to-file utility as possible. Log files are automatically splitted if they get too big and each log-message will automatically have a date attached to it. You can even add tags and colors to your messages. Check out the quick examples below!
+### Quick examples
 
 `log('Hello World!');`
 
-I just logged "Hello World!" into a log file called application-2019_01_22.log:
+Logs "Hello World!" into a log file called application-2019_01_22.log:
 ```
 Tue Jan 22 2019 20:16:43 GMT+0200 (Eastern European Standard Time)
 Hello World!
 ```
 `print('Hello World!');`
 
-Now I printed out "Hello World!" to a console:
+The application console prints out "Hello World!".
 ```
 [12.20.04] - Hello World!
 ```
 `logprint('Hello World!);`
 
-And now I did both at the same time!
+Both features with a one command.
 
 `l('Hello World!');` `p('Hello World!');` `lp('Hello World!');`
 
@@ -39,11 +39,6 @@ And here are aliases for the functions above if you feel like typing extra lette
 - Custom log prefixes
 - Tag colors
 
-### Specs
-- log(): 1.675ms
-- print(): 3.609ms
-- logprint(): 4.892ms
-
 ## Install
 
 npm
@@ -57,24 +52,26 @@ Yarn
 ## Basic Usage
 
 ### log(...value: any): void
-Logs messages into a log file.
+Logs a message into a log file.
 ```
 import { log } from 'logscribe';
 log('Hello World');
 log('Hello World', 'This will take a new line', '3rd line');
 ```
-Even though log accepts anything, you should mainly use strings, numbers, lists and booleans as some other types may not be very useful when logged. For example objects end up being [Object object].
+Even though log accepts anything, you should mainly use strings, numbers, lists and booleans as some other types may not render anything useful. For example objects end up being [Object object] due to how JavaScript is.
 
 **Alias:** l()
 
 ### print(...value: any): void
-Prints messages to a console.
+Prints a message.
 ```
 import { print } from 'logscribe';
 print('Hello World');
 print('Hello World', '2nd part');
 ```
-Unlike in log(), with print() you can also print out objects. You can disable printing with `setPrintDisabled(boolean)`.
+Unlike in log(), with print() you can also print out objects.
+
+You can disable printing with `setPrintDisabled(boolean)`. This may be useful in production environments.
 
 **Alias:** p()
 
@@ -90,7 +87,9 @@ logprint('Hello World', 'This will take a new line', '3rd line');
 ## Advanced Usage
 
 ### Logging, printing and logprinting with tags
-To execute basic functionality with a tag or a custom color you need to initialize the log(), print() or logprint() functions with a `logscribe(tag: string, color?: string)` wrapper. With this wrapper you can define what tags or colors are being used. You can also create multiple wrappers for different needs!
+To execute basic functionality with a tag or a custom color you need to initialize the log(), print() or logprint() functions with a `logscribe(tag: string, color?: string)` wrapper. 
+
+With this wrapper you can define what tag or color is being used. You can also create multiple wrappers for different needs.
 ```
 import logscribe from 'logscribe';
 const { log, print, logprint } = logscribe('myTag');
@@ -99,26 +98,24 @@ log('Hello World!')
 print('Hello World!);
 logprint('Hello World!);
 ```
-Here we add a tag and a custom color!
+Here we add a tag and a custom color:
 ```
 import logscribe from 'logscribe';
-// Remember, "p" is same as "print".
-const { p } = logscribe('myTag', '\x1b[32m');
-p('myTag now has a cool custom color.');
+const { print } = logscribe('myTag', '\x1b[32m');
+print('myTag now has a custom color.');
 ```
-Let's dive deeper...
+Let's dive deeper. Two printing commands, one for regular prints and one for error events:
 ```
 import logscribe from 'logscribe';
 const { print } = logscribe('General');
-// Notice the ".print" part in the following. "\x1b[31m" is red.
 const warningPrint = logscribe('WARNING', '\x1b[31m').print;
 try {
-  print('Everything is cool!');
+  print('All good.');
 } catch(e) {
-  warningPrint('Oh no, an error!', e);
+  warningPrint('Oh no, an error.', e);
 }
 ```
-For ES5 the syntax is *slightly* different.
+The ES5 syntax is *slightly* different:
 ```
 // Logging without tags.
 const { log } = require('logscribe');
@@ -128,7 +125,7 @@ const { print } = require('logscribe').default('General');
 ```
 ## Settings
 
-These are global settings for LogScribe. Set them as your project initializes.
+These are the optional global settings for LogScribe. Set them as your project initializes.
 
 ### setLogDirPath(value: string): void
 Sets a directory path for the log files. The application must have a writing permission to the path and the path must exist.
@@ -136,17 +133,17 @@ Sets a directory path for the log files. The application must have a writing per
 `Default: <app root>`
 
 ### setLogMaxSize(value: number): void
-Maximum filesize of a log before a new log file is created. Value is in bytes (1000 = 1KB).
+The maximum filesize of a log before a new log file is created. Value is in bytes (1000 = 1KB).
 
 `Default: 1024000`
 
 ### setLogPrefix(value: string): void
-Prefix for the log file. For example a value "custom" would end up being: `custom_2019-22-01.log`.
+A prefix for the filenames. For example a value "custom" would produce: "custom_2019-22-01.log".
 
 `Default: "application"`
 
 ### setPrintDisabled(value: boolean): void
-Whether to disable p(), print() and partially logprint() or lp(). Logging will stay active. Useful in situations where you'd like to disable printing, like for example in production environments: `setPrintDisabled(process.env.NODE_ENV === 'production');`.
+Disables console printing. Useful in production environments where you may not want to print out everything.
 
 `Default: false`
 
