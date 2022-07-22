@@ -15,7 +15,7 @@
   "scripts": {
     "build": "webpack --progress --config webpack.config.js",
     "test": "cross-env NODE_ENV=testing jest",
-    "lint": "./node_modules/.bin/tslint --project ./ --fix ./src/**",
+    "lint": "cross-env ./node_modules/.bin/tslint --project ./ --fix ./src/**",
     "benchmark": "node performance"
   },
   "devDependencies": {

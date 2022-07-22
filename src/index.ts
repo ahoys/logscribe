@@ -40,7 +40,7 @@ export interface Isettings {
 // These are the so called global settings.
 // User can modify these on file-basis.
 const settings: Isettings = {
-  logDirPath: appDir,
+  logDirPath: appDir.endsWith('/') || appDir.endsWith('\\') ? appDir : '/',
   logMaxSize: 1024000,
   logPrefix: 'application',
   printDisabled: false,
@@ -97,11 +97,17 @@ const writeBufferToLog = (
       filepath = existingPath;
     } else {
       filepath =
-        `${settings.logDirPath}\\${settings.logPrefix}_` +
-        `${dateBuffer[index].getFullYear()}-` +
-        `${dateBuffer[index].getMonth()}-` +
-        `${dateBuffer[index].getDate()}-` +
-        `${dateBuffer[index].getTime()}.log`;
+        settings.logDirPath +
+        settings.logPrefix +
+        '_' +
+        dateBuffer[index].getFullYear() +
+        '-' +
+        dateBuffer[index].getMonth() +
+        '-' +
+        dateBuffer[index].getDate() +
+        '-' +
+        dateBuffer[index].getTime() +
+        '.log';
     }
     fs.appendFile(filepath, buffer[index], 'utf8', (aErr) => {
       if (aErr) {
@@ -281,7 +287,12 @@ const logprintWithTag = (tag: string, ...payload: any): void => {
  */
 export const setLogDirPath = (value: string): void => {
   try {
-    settings.logDirPath = String(value);
+    // Make a good guess whether we use forward or backward slashes.
+    const slash = value.includes('\\') ? '\\' : '/';
+    settings.logDirPath =
+      value.endsWith('/') || value.endsWith('\\')
+        ? String(value)
+        : String(value) + slash;
   } catch {
     return;
   }
